@@ -19,7 +19,7 @@ sub empty_port {
     while ( $port++ < 20000 ) {
         my $sock = IO::Socket::INET->new(
             Listen    => 5,
-            LocalAddr => 'localhost',
+            LocalAddr => '127.0.0.1',
             LocalPort => $port,
             Proto     => 'tcp'
         );
