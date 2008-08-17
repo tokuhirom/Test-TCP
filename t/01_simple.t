@@ -30,7 +30,7 @@ sub run {
 package main;
 use strict;
 use warnings;
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::TCP;
 use IO::Socket::INET;
 
@@ -45,6 +45,9 @@ test_tcp(
         print {$sock} "foo\n";
         my $res = <$sock>;
         is $res, "foo\n";
+        print {$sock} "bar\n";
+        my $res2 = <$sock>;
+        is $res2, "bar\n";
     },
     server => sub {
         my $port = shift;
