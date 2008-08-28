@@ -1,4 +1,8 @@
 Revision history for Perl extension Test::TCP
 
+0.02
+
+    - fixed deps for Sub::Exporter(by yappo++)
+
 0.01    Sun Aug 17 15:00:46 2008
         - original version

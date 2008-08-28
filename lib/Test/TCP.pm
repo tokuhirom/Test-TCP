@@ -2,7 +2,7 @@ package Test::TCP;
 use strict;
 use warnings;
 use 5.00800;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 use Sub::Exporter -setup => {
     exports => [
         qw/ empty_port test_tcp wait_port /
