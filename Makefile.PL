@@ -4,6 +4,7 @@ all_from 'lib/Test/TCP.pm';
 
 requires 'IO::Socket::INET' => 1.31;
 requires 'Params::Validate' => 0.91;
+requires 'Sub::Exporter'    => 0.979;
 
 tests 't/*.t t/*/*.t t/*/*/*.t t/*/*/*/*.t';
 test_requires 'Test::More';
