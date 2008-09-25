@@ -23,6 +23,7 @@ sub run {
     while (my $remote = $self->{sock}->accept) {
         while (my $line = <$remote>) {
             print {$remote} $line;
+            return close $self->{sock} if $line =~ /quit/;
         }
     }
 }
@@ -48,6 +49,7 @@ test_tcp(
         print {$sock} "bar\n";
         my $res2 = <$sock>;
         is $res2, "bar\n";
+        print {$sock} "quit\n";
     },
     server => sub {
         my $port = shift;
