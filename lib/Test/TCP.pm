@@ -110,6 +110,20 @@ Test::TCP - testing TCP program
         },
     );
 
+useing other server program
+
+    my $port = empty_port();
+    test_tcp(
+        client => sub {
+            my $port = shift;
+            # send request to the server
+        },
+        server => sub {
+            exec '/foo/bar/bin/server', 'options';
+        },
+    );
+
+
 =head1 DESCRIPTION
 
 Test::TCP is test utilities for TCP/IP program.
