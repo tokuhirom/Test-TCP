@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+0.04
+
+    - Test::SharedFork 0.03 has a bug. depend to 0.04
+
 0.03
 
     - do not depend to Sub::Exporter
