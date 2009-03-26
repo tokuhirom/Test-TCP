@@ -6,6 +6,7 @@ our $VERSION = '0.02';
 use base qw/Exporter/;
 use IO::Socket::INET;
 use Params::Validate ':all';
+use Test::SharedFork;
 
 our @EXPORT = qw/ empty_port test_tcp wait_port /;
 
@@ -37,7 +38,7 @@ sub test_tcp {
 
     my $port = $args{port};
 
-    if ( my $pid = fork() ) {
+    if ( my $pid = Test::SharedFork->fork() ) {
         # parent.
         wait_port($port);
 
