@@ -31,13 +31,14 @@ sub run {
 package main;
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More tests => 22;
 use Test::TCP;
 use IO::Socket::INET;
 
 test_tcp(
     client => sub {
         my $port = shift;
+        ok $port for 1..10;
         my $sock = IO::Socket::INET->new(
             PeerPort => $port,
             PeerAddr => '127.0.0.1',
@@ -53,6 +54,7 @@ test_tcp(
     },
     server => sub {
         my $port = shift;
+        ok $port for 1..10;
         MyEchoServer->new($port)->run;
     },
 );
