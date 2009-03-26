@@ -3,14 +3,11 @@ use strict;
 use warnings;
 use 5.00800;
 our $VERSION = '0.02';
-use Sub::Exporter -setup => {
-    exports => [
-        qw/ empty_port test_tcp wait_port /
-    ],
-    groups => { default => [':all'] }
-};
+use base qw/Exporter/;
 use IO::Socket::INET;
 use Params::Validate ':all';
+
+our @EXPORT = qw/ empty_port test_tcp wait_port /;
 
 sub empty_port {
     my $port = shift || 10000;
@@ -110,7 +107,7 @@ Test::TCP - testing TCP program
         },
     );
 
-useing other server program
+using other server program
 
     my $port = empty_port();
     test_tcp(
