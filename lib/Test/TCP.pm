@@ -19,7 +19,8 @@ sub empty_port {
             Listen    => 5,
             LocalAddr => '127.0.0.1',
             LocalPort => $port,
-            Proto     => 'tcp'
+            Proto     => 'tcp',
+            ReuseAddr => 1,
         );
         return $port if $sock;
     }
@@ -96,7 +97,6 @@ Test::TCP - testing TCP program
 =head1 SYNOPSIS
 
     use Test::TCP;
-    my $port = empty_port();
     test_tcp(
         client => sub {
             my $port = shift;
@@ -110,7 +110,6 @@ Test::TCP - testing TCP program
 
 using other server program
 
-    my $port = empty_port();
     test_tcp(
         client => sub {
             my $port = shift;
@@ -120,7 +119,6 @@ using other server program
             exec '/foo/bar/bin/server', 'options';
         },
     );
-
 
 =head1 DESCRIPTION
 
@@ -134,7 +132,7 @@ Test::TCP is test utilities for TCP/IP program.
 
     my $port = empty_port();
 
-search empty port
+Get the available port number, you can use.
 
 =item test_tcp
 
@@ -155,7 +153,7 @@ search empty port
 
     wait_port(8080);
 
-Waits for a particular port is available
+Waits for a particular port is available for connect.
 
 =back
 
