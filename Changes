@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::TCP
 
+0.05
+
+    - updated docs
+    - set ReuseAddr as true
+
 0.04
 
     - Test::SharedFork 0.03 has a bug. depend to 0.04
