@@ -2,7 +2,7 @@ package Test::TCP;
 use strict;
 use warnings;
 use 5.00800;
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 use base qw/Exporter/;
 use IO::Socket::INET;
 use Params::Validate ':all';
@@ -28,16 +28,11 @@ sub empty_port {
 }
 
 sub test_tcp {
-    my %args = validate(@_, {
-        client => CODEREF,
-        server => CODEREF,
-        port   => {
-            type => SCALAR,
-            default => empty_port(),
-        },
-    });
-
-    my $port = $args{port};
+    my %args = @_;
+    for my $k (qw/client server/) {
+        die "missing madatory parameter $k" unless exists $args{$k};
+    }
+    my $port = $args{port} || empty_port();
 
     if ( my $pid = Test::SharedFork->fork() ) {
         # parent.

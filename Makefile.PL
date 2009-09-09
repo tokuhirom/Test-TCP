@@ -3,7 +3,6 @@ name 'Test-TCP';
 all_from 'lib/Test/TCP.pm';
 
 requires 'IO::Socket::INET' => 1.31;
-requires 'Params::Validate' => 0.91;
 requires 'Test::SharedFork' => 0.04;
 
 tests 't/*.t t/*/*.t t/*/*/*.t t/*/*/*/*.t';
