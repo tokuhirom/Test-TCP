@@ -43,7 +43,7 @@ sub test_tcp {
         # parent.
         wait_port($port);
 
-        $args{client}->($port);
+        $args{client}->($port, $pid);
 
         kill TERM => $pid;
         waitpid( $pid, 0 );
