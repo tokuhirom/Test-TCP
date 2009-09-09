@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::TCP
 
+0.06
+
+    - pass the pid to client(kazuho)
+    - remove deps for Params::Validate(tokuhirom)
+
 0.05
 
     - updated docs

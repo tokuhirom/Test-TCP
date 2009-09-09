@@ -156,6 +156,10 @@ Waits for a particular port is available for connect.
 
 Tokuhiro Matsuno E<lt>tokuhirom@gmail.comE<gt>
 
+=head1 THANKS TO
+
+kazuhooku
+
 =head1 SEE ALSO
 
 =head1 LICENSE
