@@ -7,6 +7,9 @@ use base qw/Exporter/;
 use IO::Socket::INET;
 use Params::Validate ':all';
 use Test::SharedFork;
+use Test::More ();
+use Config;
+use POSIX;
 
 our @EXPORT = qw/ empty_port test_tcp wait_port /;
 
@@ -42,6 +45,9 @@ sub test_tcp {
 
         kill TERM => $pid;
         waitpid( $pid, 0 );
+        if (WIFSIGNALED($?) && (split(' ', $Config{sig_name}))[WTERMSIG($?)] eq 'ABRT') {
+            Test::More::diag("your server received SIGABRT");
+        }
     }
     elsif ( $pid == 0 ) {
         # child
