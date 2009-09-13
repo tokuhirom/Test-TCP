@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+0.07
+
+    - diag when get a SIGABRT
+
 0.06
 
     - pass the pid to client(kazuho)
