@@ -26,6 +26,7 @@ README
 t/00_compile.t
 t/01_simple.t
 t/02_abrt.t
+t/03_return_when_sigterm.t
 xt/01_podspell.t
 xt/02_perlcritic.t
 xt/03_pod.t

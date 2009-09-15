@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::TCP
 
+0.09
+
+    - don't leak the control by SIGTERM, some tcp server return the control by SIGTERM.
+      (reported by kazuho++)
+
 0.08
 
     - oops. I forget to remove 'use Params::Validate' statement.
