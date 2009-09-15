@@ -51,6 +51,7 @@ sub test_tcp {
     elsif ( $pid == 0 ) {
         # child
         $args{server}->($port);
+        exit;
     }
     else {
         die "fork failed: $!";
