@@ -4,6 +4,7 @@ use Test::TCP;
 use Test::More;
 use Socket;
 use IO::Socket::INET;
+use t::EchoServer;
 
 test_tcp(
     client => sub {
@@ -22,20 +23,12 @@ test_tcp(
     },
     server => sub {
         my $port = shift;
-        my $sock = IO::Socket::INET->new(
-            LocalPort => $port,
-            LocalAddr => '127.0.0.1',
-            Proto     => 'tcp',
-            Listen    => 5,
-            Type      => SOCK_STREAM,
-        ) or die "Cannot open server socket: $!";
-        while (my $remote = $sock->accept) {
-            while (my $line = <$remote>) {
-                print {$remote} $line;
-                if ($line =~ /dump/) {
-                    return CORE::dump()
-                }
+        t::EchoServer->new($port)->run(sub {
+            my ($remote, $line) = @_;
+            print {$remote} $line;
+            if ($line =~ /dump/) {
+                return CORE::dump()
             }
-        }
+        });
     },
 );
