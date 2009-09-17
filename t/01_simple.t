@@ -3,7 +3,7 @@ use strict;
 use Test::More tests => 22;
 use Test::TCP;
 use IO::Socket::INET;
-use t::EchoServer;
+use t::Server;
 
 test_tcp(
     client => sub {
@@ -25,7 +25,7 @@ test_tcp(
     server => sub {
         my $port = shift;
         ok $port for 1..10;
-        t::EchoServer->new($port)->run(sub {
+        t::Server->new($port)->run(sub {
             my ($remote, $line, $sock) = @_;
             print {$remote} $line;
         });

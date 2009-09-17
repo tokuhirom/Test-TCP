@@ -4,7 +4,7 @@ use Test::TCP;
 use Test::More;
 use Socket;
 use IO::Socket::INET;
-use t::EchoServer;
+use t::Server;
 
 test_tcp(
     client => sub {
@@ -23,7 +23,7 @@ test_tcp(
     },
     server => sub {
         my $port = shift;
-        t::EchoServer->new($port)->run(sub {
+        t::Server->new($port)->run(sub {
             my ($remote, $line) = @_;
             print {$remote} $line;
             if ($line =~ /dump/) {

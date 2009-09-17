@@ -1,4 +1,4 @@
-package t::EchoServer;
+package t::Server;
 use strict;
 use warnings;
 use base qw/Exporter/;
