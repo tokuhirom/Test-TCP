@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::TCP
 
+0.10
+
+    - don't leak the process when get a SIGDIE
+    - diag when get SIGPIPE
+
 0.09
 
     - don't leak the control by SIGTERM, some tcp server return the control by SIGTERM.
