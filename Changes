@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+0.11
+
+    - fixed broken test, reported by drangon3++
+
 0.10
 
     - don't leak the process when get a SIGDIE

@@ -2,7 +2,7 @@ package Test::TCP;
 use strict;
 use warnings;
 use 5.00800;
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 use base qw/Exporter/;
 use IO::Socket::INET;
 use Test::SharedFork;
@@ -175,6 +175,8 @@ Tokuhiro Matsuno E<lt>tokuhirom@gmail.comE<gt>
 =head1 THANKS TO
 
 kazuhooku
+
+dragon3
 
 =head1 SEE ALSO
 
