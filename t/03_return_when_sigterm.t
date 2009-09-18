@@ -2,7 +2,6 @@ use warnings;
 use strict;
 use Test::More;
 use Test::TCP;
-use Test::Requires;
 use t::Server;
 
 # ABOUT: some tcp server related software returns control when received SIGTERM
