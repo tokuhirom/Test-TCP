@@ -47,8 +47,11 @@ sub test_tcp {
 
         kill TERM => $pid;
         waitpid( $pid, 0 );
-        if (WIFSIGNALED($?) && (split(' ', $Config{sig_name}))[WTERMSIG($?)] eq 'ABRT') {
-            Test::More::diag("your server received SIGABRT");
+        if (WIFSIGNALED($?)) {
+            my $signame = (split(' ', $Config{sig_name}))[WTERMSIG($?)];
+            if ($signame =~ /^(ABRT|PIPE)$/) {
+                Test::More::diag("your server received SIG$signame");
+            }
         }
 
         if ($err) {
