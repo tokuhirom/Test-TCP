@@ -40,12 +40,19 @@ sub test_tcp {
         # parent.
         wait_port($port);
 
-        $args{client}->($port, $pid);
+        eval {
+            $args{client}->($port, $pid);
+        };
+        my $err = $@;
 
         kill TERM => $pid;
         waitpid( $pid, 0 );
         if (WIFSIGNALED($?) && (split(' ', $Config{sig_name}))[WTERMSIG($?)] eq 'ABRT') {
             Test::More::diag("your server received SIGABRT");
+        }
+
+        if ($err) {
+            die $err; # rethrow after cleanup.
         }
     }
     elsif ( $pid == 0 ) {
