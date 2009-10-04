@@ -14,6 +14,7 @@ sub new_sock {
         Proto     => 'tcp',
         Listen    => 5,
         Type      => SOCK_STREAM,
+        ReuseAddr => 1,
     ) or die "Cannot open server socket: $!";
     return $sock;
 }
