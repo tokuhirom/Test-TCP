@@ -178,6 +178,36 @@ Waits for a particular port is available for connect.
 
 =back
 
+=head1 FAQ
+
+=over 4
+
+=item How to invoke two servers?
+
+You can call test_tcp() twice!
+
+    test_tcp(
+        client => sub {
+            my $port1 = shift;
+            test_tcp(
+                client => sub {
+                    my $port2 = shift;
+                    # some client code here
+                },
+                server => sub {
+                    my $port2 = shift;
+                    # some server2 code here
+                },
+            );
+        },
+        server => sub {
+            my $port1 = shift;
+            # some server1 code here
+        },
+    );
+
+=back
+
 =head1 AUTHOR
 
 Tokuhiro Matsuno E<lt>tokuhirom@gmail.comE<gt>
