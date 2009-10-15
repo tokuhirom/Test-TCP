@@ -43,7 +43,8 @@ sub test_tcp {
         my $sig;
         my $err;
         {
-            local $SIG{INT} = sub { $sig = "INT"; die "SIGINT received\n" };
+            local $SIG{INT}  = sub { $sig = "INT"; die "SIGINT received\n" };
+            local $SIG{PIPE} = sub { $sig = "PIPE"; die "SIGPIPE received\n" };
             eval {
                 $args{client}->($port, $pid);
             };
