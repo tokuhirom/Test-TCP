@@ -1,11 +1,8 @@
 use strict;
 use warnings;
 use Test::TCP;
-use IO::Socket::INET;
-use POSIX;
 use Test::More;
 use t::Server;
-use HTTP::Daemon;
 
 test_tcp(
     client => sub {
