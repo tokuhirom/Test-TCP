@@ -20,7 +20,7 @@ test_tcp(
                     $ua->proxy('http', "http://127.0.0.1:$proxy_port");
                     my $res = $ua->get("http://127.0.0.1:$httpd_port");
                     ok $res->is_success;
-                    is $res->content, 'ok';
+                    is $res->content, 'OK!!!';
                 };
                 done_testing;
             },
