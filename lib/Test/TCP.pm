@@ -40,22 +40,31 @@ sub test_tcp {
         # parent.
         wait_port($port);
 
-        eval {
-            $args{client}->($port, $pid);
-        };
-        my $err = $@;
+        my $sig;
+        my $err;
+        {
+            local $SIG{INT} = sub { $sig = "INT"; die "SIGINT received\n" };
+            eval {
+                $args{client}->($port, $pid);
+            };
+            $err = $@;
 
-        kill TERM => $pid;
-        waitpid( $pid, 0 );
-        if (WIFSIGNALED($?)) {
-            my $signame = (split(' ', $Config{sig_name}))[WTERMSIG($?)];
-            if ($signame =~ /^(ABRT|PIPE)$/) {
-                Test::More::diag("your server received SIG$signame");
+            # cleanup
+            kill TERM => $pid;
+            waitpid( $pid, 0 );
+            if (WIFSIGNALED($?)) {
+                my $signame = (split(' ', $Config{sig_name}))[WTERMSIG($?)];
+                if ($signame =~ /^(ABRT|PIPE)$/) {
+                    Test::More::diag("your server received SIG$signame");
+                }
             }
         }
 
+        if ($sig) {
+            kill $sig, $$; # rethrow signal after cleanup
+        }
         if ($err) {
-            die $err; # rethrow after cleanup.
+            die $err; # rethrow exception after cleanup.
         }
     }
     elsif ( $pid == 0 ) {
