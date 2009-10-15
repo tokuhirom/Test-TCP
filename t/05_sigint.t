@@ -43,5 +43,3 @@ if ($pid > 0) {
     die 'sucks';
 }
 
-sub sig_name {
-}
