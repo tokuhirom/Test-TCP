@@ -24,11 +24,6 @@ test_tcp(
     },
     server => sub {
         my $port1 = shift;
-#       my $d = HTTP::Daemon->new(ReuseAddr => 1, LocalPort => $port1) || die;
-#       while (my $c = $d->accept) {
-#           $c->close;
-#           undef($c);
-#       }
         t::Server->new($port1)->run;
     },
 );
