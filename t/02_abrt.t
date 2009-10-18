@@ -6,6 +6,8 @@ use Socket;
 use IO::Socket::INET;
 use t::Server;
 
+plan skip_all => "win32 doesn't support embedded function named dump()" if $^O eq 'MSWin32';
+
 test_tcp(
     client => sub {
         my $port = shift;
