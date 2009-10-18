@@ -32,7 +32,7 @@ test_tcp(
         my $port = shift;
         ok $port, "test case for sharedfork" for 1..10;
         t::Server->new($port)->run(sub {
-            note "new connection";
+            note "new request";
             my ($remote, $line, $sock) = @_;
             print {$remote} $line;
         });
