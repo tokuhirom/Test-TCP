@@ -55,13 +55,18 @@ sub test_tcp {
 
             # cleanup
             kill $TERMSIG => $pid;
-            waitpid( $pid, 0 );
-            if ($^O ne 'MSWin32') { # i'm not in hell
-                if (WIFSIGNALED($?)) {
-                    my $signame = (split(' ', $Config{sig_name}))[WTERMSIG($?)];
-                    if ($signame =~ /^(ABRT|PIPE)$/) {
-                        Test::More::diag("your server received SIG$signame");
+            while (1) {
+                my $kid = waitpid( $pid, 0 );
+                if ($^O ne 'MSWin32') { # i'm not in hell
+                    if (WIFSIGNALED($?)) {
+                        my $signame = (split(' ', $Config{sig_name}))[WTERMSIG($?)];
+                        if ($signame =~ /^(ABRT|PIPE)$/) {
+                            Test::More::diag("your server received SIG$signame");
+                        }
                     }
+                }
+                if ($kid == 0 || $kid == -1) {
+                    last;
                 }
             }
         }
