@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+0.13
+
+    - handle sigint(reported by kazuho++)
+
 0.12
 
     - fixed broken test on solaris
