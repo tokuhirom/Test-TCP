@@ -10,6 +10,9 @@ use Test::More ();
 use Config;
 use POSIX;
 
+# process does not die when received SIGTERM, on win32.
+my $TERMSIG = $^O eq 'MSWin32' ? 'KILL' : 'TERM';
+
 our @EXPORT = qw/ empty_port test_tcp wait_port /;
 
 sub empty_port {
@@ -51,12 +54,14 @@ sub test_tcp {
             $err = $@;
 
             # cleanup
-            kill TERM => $pid;
+            kill $TERMSIG => $pid;
             waitpid( $pid, 0 );
-            if (WIFSIGNALED($?)) {
-                my $signame = (split(' ', $Config{sig_name}))[WTERMSIG($?)];
-                if ($signame =~ /^(ABRT|PIPE)$/) {
-                    Test::More::diag("your server received SIG$signame");
+            if ($^O ne 'MSWin32') { # i'm not in hell
+                if (WIFSIGNALED($?)) {
+                    my $signame = (split(' ', $Config{sig_name}))[WTERMSIG($?)];
+                    if ($signame =~ /^(ABRT|PIPE)$/) {
+                        Test::More::diag("your server received SIG$signame");
+                    }
                 }
             }
         }
