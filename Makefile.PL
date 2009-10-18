@@ -1,3 +1,5 @@
+sub author_tests { } # placeholder
+
 use inc::Module::Install;
 name 'Test-TCP';
 all_from 'lib/Test/TCP.pm';
