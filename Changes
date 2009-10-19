@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+0.14
+
+    - support win32
+
 0.13
 
     - handle sigint(reported by kazuho++)
