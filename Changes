@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+0.15
+
+    - fixed win32 issue(by charsbar++)
+
 0.14
 
     - support win32
