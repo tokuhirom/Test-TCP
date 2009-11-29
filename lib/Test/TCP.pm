@@ -25,7 +25,7 @@ sub empty_port {
             LocalAddr => '127.0.0.1',
             LocalPort => $port,
             Proto     => 'tcp',
-            ReuseAddr => 1,
+            (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
         );
         return $port if $sock;
     }

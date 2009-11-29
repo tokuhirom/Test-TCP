@@ -11,6 +11,7 @@ eval {
         client => sub {
             my ($port, $pid) = @_;
             $child_pid = $pid;
+            sleep 3; # wait till the server actually starts
             die "sinamon";
         },
         server => sub {
