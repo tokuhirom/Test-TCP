@@ -18,8 +18,10 @@ our @EXPORT = qw/ empty_port test_tcp wait_port /;
 sub empty_port {
     my $port = shift || 10000;
     $port = 19000 unless $port =~ /^[0-9]+$/ && $port < 19000;
+    my $global_lock = Test::TCP::Lock->new(0); # get global lock
 
     while ( $port++ < 20000 ) {
+        next if -d Test::TCP::Lock->_lock_dir($port);
         my $sock = IO::Socket::INET->new(
             Listen    => 5,
             LocalAddr => '127.0.0.1',
@@ -27,7 +29,7 @@ sub empty_port {
             Proto     => 'tcp',
             (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
         );
-        return $port if $sock;
+        return Test::TCP::Lock->new($port) if $sock;
     }
     die "empty port not found";
 }
@@ -114,6 +116,49 @@ sub wait_port {
         sleep 1;
     }
     die "cannot open port: $port";
+}
+
+
+{
+    package    # hide from pause
+      Test::TCP::Lock;
+    use File::Spec;
+    use overload
+        '0+'  => sub { $_[0]->{port} },
+        q{""} => sub { $_[0]->{port} },
+        q{ne} => sub { $_[0]->{port} ne $_[1]->{port} },
+        q{!=} => sub { $_[0]->{port} != $_[1]->{port} },
+        q{<}  => sub { $_[0]->{port}  < $_[1]->{port} },
+        fallback => 1,
+    ;
+
+    sub _lock_dir {
+        my ($class, $port) = @_;
+        return File::Spec->catfile(
+            File::Spec->tmpdir(),
+            sprintf( "test-tcp-%d-%d.lock", getppid(), $port )
+        );
+    }
+
+    sub new {
+        my ($class, $port) = @_;
+
+        my $dir = $class->_lock_dir($port);
+
+      LOOP: while (1) {
+            while ( -d $dir ) {
+                sleep 1;
+            }
+            if ( mkdir($dir) ) {
+                last LOOP;
+            }
+        }
+        bless { dir => $dir, pid => $$, port => $port }, $class;
+    }
+
+    sub DESTROY {
+        rmdir $_[0]->{dir} if $$ == $_[0]->{pid};
+    }
 }
 
 1;
