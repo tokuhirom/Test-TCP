@@ -146,11 +146,16 @@ sub wait_port {
         my $dir = $class->_lock_dir($port);
 
       LOOP: while (1) {
-            while ( -d $dir ) {
-                sleep 1;
-            }
-            if ( mkdir($dir) ) {
+            if( mkdir($dir) ){
                 last LOOP;
+            }
+            else{
+                if($!{EEXISTS}){
+                    sleep 1;
+                }
+                else{
+                    die "Cannot mkdir($dir): $!";
+                }
             }
         }
         bless { dir => $dir, pid => $$, port => $port }, $class;
