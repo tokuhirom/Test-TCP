@@ -17,6 +17,7 @@ our @EXPORT = qw/ empty_port test_tcp wait_port /;
 
 sub empty_port {
     my $port = shift || 10000;
+       $port = 0+$port; # integer is required
     $port = 19000 unless $port =~ /^[0-9]+$/ && $port < 19000;
     my $global_lock = Test::TCP::Lock->new(0); # get global lock
 
@@ -126,9 +127,6 @@ sub wait_port {
     use overload
         '0+'  => sub { $_[0]->{port} },
         q{""} => sub { $_[0]->{port} },
-        q{ne} => sub { $_[0]->{port} ne $_[1]->{port} },
-        q{!=} => sub { $_[0]->{port} != $_[1]->{port} },
-        q{<}  => sub { $_[0]->{port}  < $_[1]->{port} },
         fallback => 1,
     ;
 
