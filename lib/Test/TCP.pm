@@ -9,6 +9,7 @@ use Test::SharedFork;
 use Test::More ();
 use Config;
 use POSIX;
+use Time::HiRes ();
 
 # process does not die when received SIGTERM, on win32.
 my $TERMSIG = $^O eq 'MSWin32' ? 'KILL' : 'TERM';
@@ -108,10 +109,10 @@ sub _check_port {
 sub wait_port {
     my $port = shift;
 
-    my $retry = 10;
+    my $retry = 100;
     while ( $retry-- ) {
         return if _check_port($port);
-        sleep 1;
+        Time::HiRes::sleep(0.1);
     }
     die "cannot open port: $port";
 }
