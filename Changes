@@ -1,5 +1,11 @@
 Revision history for Perl extension Test::TCP
 
+0.16_01
+
+    - Do not depend to IO::Socket::INET 1.31.
+      Test::TCP works well with older IO, I hope.
+      (suggested by mst)
+
 0.16
 
     - check port asap(suggested by Hideki YAMAMURA)
