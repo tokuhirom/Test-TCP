@@ -4,7 +4,7 @@ use inc::Module::Install;
 name 'Test-TCP';
 all_from 'lib/Test/TCP.pm';
 
-requires 'IO::Socket::INET' => 1.31;
+requires 'IO::Socket::INET' => 0;
 requires 'Test::SharedFork' => 0.09;
 
 tests 't/*.t t/*/*.t t/*/*/*.t t/*/*/*/*.t';

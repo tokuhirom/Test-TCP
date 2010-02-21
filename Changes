@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+0.16_02
+
+    - oops. packaging miss.
+
 0.16_01
 
     - Do not depend to IO::Socket::INET 1.31.
