@@ -1,6 +1,6 @@
 use warnings;
 use strict;
-use Test::More;
+use Test::More tests => 3;
 use Test::TCP;
 use IO::Socket::INET;
 use t::Server;
@@ -24,5 +24,4 @@ ok $@;
 like $@, qr/sinamon/;
 my $killed = kill 9, $child_pid;
 is $killed, 0, "already killed by test_tcp";
-done_testing;
 

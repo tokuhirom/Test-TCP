@@ -7,6 +7,7 @@ use Test::More;
 use Config;
 
 plan skip_all => "this test requires SIGUSR1" unless $Config{sig_name} =~ /USR1/;
+plan tests => 2;
 
 my $pid = Test::SharedFork->fork;
 # my $killed_server = 0;
@@ -18,7 +19,6 @@ if ($pid > 0) {
     ok POSIX::WIFSIGNALED($?);
     is [split / /, $Config{sig_name}]->[POSIX::WTERMSIG($?)], 'INT', "sigint";
 #   ok $killed_server, "really killed";
-    done_testing;
 } elsif ($pid == 0) {
 #   $SIG{CHLD} = sub {
 #       kill 'USR1', POSIX::getppid();

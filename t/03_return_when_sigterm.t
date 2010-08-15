@@ -1,6 +1,6 @@
 use warnings;
 use strict;
-use Test::More;
+use Test::More tests => 1;
 use Test::TCP;
 use t::Server;
 
@@ -24,5 +24,4 @@ test_tcp(
         }
     },
 );
-done_testing;
 

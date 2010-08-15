@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::TCP;
-use Test::More;
+use Test::More tests => 2;
 use Socket;
 use IO::Socket::INET;
 use t::Server;
@@ -21,7 +21,6 @@ test_tcp(
         is $res, "dump\n";
         $sock->close();
         ok 1;
-        done_testing;
     },
     server => sub {
         my $port = shift;
