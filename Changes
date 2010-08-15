@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+1.01
+
+    - remove unused deps for use_test_base().
+
 1.00
 
     - bump up version!

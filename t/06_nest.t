@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::TCP;
-use Test::More;
+use Test::More tests => 1;
 use t::Server;
 
 test_tcp(
