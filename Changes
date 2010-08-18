@@ -1,5 +1,12 @@
 Revision history for Perl extension Test::TCP
 
+1.02
+
+    - lazy loading issue was fixed at Test::SharedFork 0.12.
+      Depend to it.
+      https://rt.cpan.org/Public/Bug/Display.html?id=60426
+      (reported by J.)
+
 1.01
 
     - remove unused deps for use_test_base().
