@@ -44,19 +44,11 @@ sub test_tcp {
         # parent.
         wait_port($port);
 
-        my $sig;
-        my $err;
-        {
-            local $SIG{INT}  = sub { $sig = "INT"; die "SIGINT received\n" };
-            local $SIG{PIPE} = sub { $sig = "PIPE"; die "SIGPIPE received\n" };
-            eval {
-                $args{client}->($port, $pid);
-            };
-            $err = $@;
-
+        my $guard = Test::TCP::Guard->new(code => sub {
             # cleanup
             kill $TERMSIG => $pid;
-            while (1) {
+            local $?; # waitpid modifies original $?.
+            LOOP: while (1) {
                 my $kid = waitpid( $pid, 0 );
                 if ($^O ne 'MSWin32') { # i'm not in hell
                     if (WIFSIGNALED($?)) {
@@ -67,17 +59,12 @@ sub test_tcp {
                     }
                 }
                 if ($kid == 0 || $kid == -1) {
-                    last;
+                    last LOOP;
                 }
             }
-        }
+        });
 
-        if ($sig) {
-            kill $sig, $$; # rethrow signal after cleanup
-        }
-        if ($err) {
-            die $err; # rethrow exception after cleanup.
-        }
+        $args{client}->($port, $pid);
     }
     elsif ( $pid == 0 ) {
         # child
@@ -115,6 +102,19 @@ sub wait_port {
         Time::HiRes::sleep(0.1);
     }
     die "cannot open port: $port";
+}
+
+{
+    package # hide from pause
+        Test::TCP::Guard;
+    sub new {
+        my ($class, %args) = @_;
+        bless { %args }, $class;
+    }
+    sub DESTROY {
+        my ($self) = @_;
+        $self->{code}->();
+    }
 }
 
 1;
