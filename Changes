@@ -1,5 +1,11 @@
 Revision history for Perl extension Test::TCP
 
+1.02_01
+
+    - better cleanup code by RAII pattern.
+      https://rt.cpan.org/Ticket/Display.html?id=60657
+      (reported by dgl)
+
 1.02
 
     - lazy loading issue was fixed at Test::SharedFork 0.12.
