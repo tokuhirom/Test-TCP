@@ -17,8 +17,15 @@ my $TERMSIG = $^O eq 'MSWin32' ? 'KILL' : 'TERM';
 our @EXPORT = qw/ empty_port test_tcp wait_port /;
 
 sub empty_port {
-    my $port = shift || 10000;
-    $port = 19000 unless $port =~ /^[0-9]+$/ && $port < 19000;
+    my $port = do {
+        if (@_) {
+            my $p = $_[0];
+            $p = 19000 unless $p =~ /^[0-9]+$/ && $p < 19000;
+            $p;
+        } else {
+            10000 + int(rand()*1000);
+        }
+    };
 
     while ( $port++ < 20000 ) {
         next if _check_port($port);
