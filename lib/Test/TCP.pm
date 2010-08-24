@@ -21,6 +21,7 @@ sub empty_port {
     $port = 19000 unless $port =~ /^[0-9]+$/ && $port < 19000;
 
     while ( $port++ < 20000 ) {
+        next if _check_port($port);
         my $sock = IO::Socket::INET->new(
             Listen    => 5,
             LocalAddr => '127.0.0.1',
