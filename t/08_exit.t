@@ -11,10 +11,11 @@ my $tmp = File::Temp->new();
 
 my $pid = fork();
 die "cannot fork: $!" unless defined $pid;
-if ($pid > 0) { # parent
+if ($pid) { # parent
     # waiting 'client'
-    {
+    SKIP: {
         waitpid($pid, 0);
+        skip 'not implemented on Win32', 4 if $^O eq 'MSWin32';
         ok WIFEXITED($?);
         ok !WIFSIGNALED($?);
         ok !WIFSTOPPED($?);
