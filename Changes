@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::TCP
 
+1.02_02
+
+    - use randomness on finding empty port(suggested by kazuhooku)
+    - try to connect the port before bind(Tatsuhiko Miyagawa)
+
 1.02_01
 
     - better cleanup code by RAII pattern.
