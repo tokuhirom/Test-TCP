@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::TCP
 
+1.03
+
+    - release to cpan
+    - fixed win32 issue(charsbar)
+
 1.02_02
 
     - use randomness on finding empty port(suggested by kazuhooku)
