@@ -1,12 +1,13 @@
 use strict;
 use warnings;
 use Test::TCP;
-use Test::More tests => 2;
+use Test::More;
 use Socket;
 use IO::Socket::INET;
 use t::Server;
 
 plan skip_all => "win32 doesn't support embedded function named dump()" if $^O eq 'MSWin32';
+plan tests => 2;
 
 test_tcp(
     client => sub {
