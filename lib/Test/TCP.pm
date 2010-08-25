@@ -121,6 +121,7 @@ sub wait_port {
     }
     sub DESTROY {
         my ($self) = @_;
+        local $@;
         $self->{code}->();
     }
 }
