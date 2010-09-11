@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::TCP
 
+1.05
+
+    - workaround for $@ issue in test case.
+      Data::Util's method modifier clears $@.
+
 1.04
 
     - fixed local $@ issue. this happens on some version of perl5.
