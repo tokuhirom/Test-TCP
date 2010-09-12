@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+1.06
+
+    - depend to Test::SharedFork 0.14. It fixes issue with Test::Builder2.
+
 1.05
 
     - workaround for $@ issue in test case.
