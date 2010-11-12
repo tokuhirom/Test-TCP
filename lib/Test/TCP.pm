@@ -117,12 +117,14 @@ sub wait_port {
         Test::TCP::Guard;
     sub new {
         my ($class, %args) = @_;
-        bless { %args }, $class;
+        bless { %args, _mypid => $$ }, $class;
     }
     sub DESTROY {
         my ($self) = @_;
-        local $@;
-        $self->{code}->();
+        if ($self->{_mypid} == $$) {
+            local $@;
+            $self->{code}->();
+        }
     }
 }
 
