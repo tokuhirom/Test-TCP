@@ -25,6 +25,7 @@ t/05_sigint.t
 t/06_nest.t
 t/07_optional.t
 t/08_exit.t
+t/09_fork.t
 t/Server.pm
 xt/01_podspell.t
 xt/02_perlcritic.t

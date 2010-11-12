@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+1.07
+
+    - allow forking in the client(lestrrat)
+
 1.06
 
     - depend to Test::SharedFork 0.14. It fixes issue with Test::Builder2.
