@@ -18,3 +18,4 @@
 ^\.shipit$
 \.sw[po]$
 ^\.git/
+^README.pod$

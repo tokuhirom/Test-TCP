@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+1.07_01
+
+    - new OO interface!
+
 1.07
 
     - allow forking in the client(lestrrat)
