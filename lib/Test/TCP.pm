@@ -10,8 +10,12 @@ use Test::More ();
 use Config;
 use POSIX;
 use Time::HiRes ();
+use Carp ();
 
 our @EXPORT = qw/ empty_port test_tcp wait_port /;
+
+# process does not die when received SIGTERM, on win32.
+my $TERMSIG = $^O eq 'MSWin32' ? 'KILL' : 'TERM';
 
 sub empty_port {
     my $port = do {
@@ -43,7 +47,7 @@ sub test_tcp {
     for my $k (qw/client server/) {
         die "missing madatory parameter $k" unless exists $args{$k};
     }
-    my $server = Test::TCP::OO->new(
+    my $server = Test::TCP->new(
         code => $args{server},
         port => $args{port} || empty_port(),
     );
@@ -79,12 +83,8 @@ sub wait_port {
     die "cannot open port: $port";
 }
 
-package Test::TCP::OO;
-use Config;
-use Carp ();
-
-# process does not die when received SIGTERM, on win32.
-my $TERMSIG = $^O eq 'MSWin32' ? 'KILL' : 'TERM';
+# ------------------------------------------------------------------------- 
+# OO-ish interface
 
 sub new {
     my $class = shift;
@@ -184,7 +184,7 @@ Or, OO-ish interface
 
     use Test::TCP;
 
-    my $server = Test::TCP::OO->new(
+    my $server = Test::TCP->new(
         code => sub {
             my $port = shift;
             ...
@@ -230,13 +230,13 @@ Waits for a particular port is available for connect.
 
 =back
 
-=head1 Test::TCP::OO
+=head1 OO-ish interface
 
 =over 4
 
-=item my $server = Test::TCP::OO->new(%args);
+=item my $server = Test::TCP->new(%args);
 
-Create new instance of Test::TCP::OO.
+Create new instance of Test::TCP.
 
 Arguments are following:
 
@@ -300,11 +300,11 @@ You can call test_tcp() twice!
 
 Or use OO-ish interface instead.
 
-    my $server1 = Test::TCP::OO->new(code => sub {
+    my $server1 = Test::TCP->new(code => sub {
         my $port1 = shift;
         ...
     });
-    my $server2 = Test::TCP::OO->new(code => sub {
+    my $server2 = Test::TCP->new(code => sub {
         my $port2 = shift;
         ...
     });

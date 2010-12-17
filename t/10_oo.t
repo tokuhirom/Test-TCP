@@ -5,7 +5,7 @@ use Test::TCP;
 use IO::Socket::INET;
 use t::Server;
 
-my $server = Test::TCP::OO->new(
+my $server = Test::TCP->new(
     code => sub {
         my $port = shift;
         ok $port, "test case for sharedfork" for 1..10;
