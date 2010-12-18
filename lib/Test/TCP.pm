@@ -312,6 +312,36 @@ Or use OO-ish interface instead.
     # your client code here.
     ...
 
+=item How do you test server program written in other languages like memcached?
+
+You can use C<exec()> in child process.
+
+    use strict;
+    use warnings;
+    use utf8;
+    use Test::More;
+    use Test::TCP 1.08;
+    use File::Which;
+
+    my $bin = scalar which 'memcached';
+    plan skip_all => 'memcached binary is not found' unless defined $bin;
+
+    my $memcached = Test::TCP->new(
+        code => sub {
+            my $port = shift;
+
+            exec $bin, '-p' => $port;
+            die "cannot execute $bin: $!";
+        },
+    );
+
+    use Cache::Memcached;
+    my $memd = Cache::Memcached->new({servers => ['127.0.0.1:' . $memcached->port]});
+    $memd->set(foo => 'bar');
+    is $memd->get('foo'), 'bar';
+
+    done_testing;
+
 =back
 
 =head1 AUTHOR
