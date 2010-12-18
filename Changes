@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+1.09
+
+    - added document in FAQ section
+
 1.08
 
     - no feature changes
