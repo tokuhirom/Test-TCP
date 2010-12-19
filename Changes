@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+1.10
+
+    - added Test::TCP->stop method
+
 1.09
 
     - added document in FAQ section
