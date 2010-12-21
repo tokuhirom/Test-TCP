@@ -147,6 +147,7 @@ sub stop {
 
 sub DESTROY {
     my $self = shift;
+    local $@;
     $self->stop();
 }
 
