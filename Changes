@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::TCP
 
+1.11
+
+    - localize $@ in Test::TCP::DESTROY
+
 1.10
 
     - added Test::TCP->stop method
