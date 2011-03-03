@@ -8,7 +8,7 @@ requires 'IO::Socket::INET' => 0;
 requires 'Test::SharedFork' => 0.14;
 
 tests 't/*.t t/*/*.t t/*/*/*.t t/*/*/*/*.t';
-test_requires 'Test::More';
+test_requires 'Test::More' => 0.98;
 author_tests 'xt';
 auto_include;
 WriteAll;
