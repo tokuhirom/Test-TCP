@@ -24,3 +24,7 @@ test_tcp(
     },
 );
 
+if ($?) {
+    diag "test_tcp() leaks \$?. Maybe it's Perl bug?: $?";
+    $? = 0;
+}

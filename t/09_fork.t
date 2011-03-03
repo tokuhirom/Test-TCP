@@ -50,3 +50,9 @@ test_tcp
     }
 ;
 
+if ($?) {
+    # It's maybe ActivePerl's bug.
+    # http://ppm4.activestate.com/MSWin32-x86/5.12/1200/T/TO/TOKUHIROM/Test-TCP-1.11.d/log-20101221T221845.txt
+    diag "test_tcp() leaks \$?. Maybe it's Perl bug?: $?";
+    $? = 0;
+}
