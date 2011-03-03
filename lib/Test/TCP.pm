@@ -114,6 +114,10 @@ sub start {
     } elsif ($pid == 0) {
         # child process
         $self->{code}->($self->port);
+        # should not reach here
+        if (kill 0, $self->{_my_pid}) { # warn only parent process still exists
+            warn("[Test::TCP] Child process does not block(PID: $$, PPID: $self->{_my_pid})");
+        }
         exit 0;
     } else {
         die "fork failed: $!";

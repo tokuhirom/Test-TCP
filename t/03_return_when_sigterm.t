@@ -23,6 +23,10 @@ test_tcp(
                 $csock->close();
             }
         }
+
+        # suppress warnings: [Test::TCP] Child process does not block(PID: 84792, PPID: 84791) 
+        # I do it on purpose!
+        $SIG{__WARN__} = sub { };
     },
 );
 
