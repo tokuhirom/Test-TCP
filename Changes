@@ -1,5 +1,11 @@
 Revision history for Perl extension Test::TCP
 
+1.12
+
+    - workaround for win32 test fails.
+      https://rt.cpan.org/Ticket/Display.html?id=66016
+    - more diagnostic messages
+
 1.11
 
     - localize $@ in Test::TCP::DESTROY
