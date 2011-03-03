@@ -167,6 +167,34 @@ Test::TCP - testing TCP program
 =head1 SYNOPSIS
 
     use Test::TCP;
+
+    my $server = Test::TCP->new(
+        code => sub {
+            my $port = shift;
+            ...
+        },
+    );
+    my $client = MyClient->new(host => '127.0.0.1', port => $server->port);
+    undef $server; # kill child process on DESTROY
+
+Using memcached:
+
+    use Test::TCP;
+
+    my $memcached = Test::TCP->new(
+        code => sub {
+            my $port = shift;
+
+            exec $bin, '-p' => $port;
+            die "cannot execute $bin: $!";
+        },
+    );
+    my $memd = Cache::Memcached->new({servers => ['127.0.0.1:' . $memcached->port]});
+    ...
+
+And functional interface is available:
+
+    use Test::TCP;
     test_tcp(
         client => sub {
             my ($port, $server_pid) = @_;
@@ -178,35 +206,9 @@ Test::TCP - testing TCP program
         },
     );
 
-using other server program
-
-    use Test::TCP;
-    test_tcp(
-        client => sub {
-            my $port = shift;
-            # send request to the server
-        },
-        server => sub {
-            exec '/foo/bar/bin/server', 'options';
-        },
-    );
-
-Or, OO-ish interface
-
-    use Test::TCP;
-
-    my $server = Test::TCP->new(
-        code => sub {
-            my $port = shift;
-            ...
-        },
-    );
-    my $client = MyClient->new(host => '127.0.0.1', port => $server->port);
-    undef $server; # kill child process on DESTROY
-
 =head1 DESCRIPTION
 
-Test::TCP is test utilities for TCP/IP program.
+Test::TCP is test utilities for TCP/IP programs.
 
 =head1 METHODS
 
@@ -219,6 +221,8 @@ Test::TCP is test utilities for TCP/IP program.
 Get the available port number, you can use.
 
 =item test_tcp
+
+Functional interface.
 
     test_tcp(
         client => sub {
