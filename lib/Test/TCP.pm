@@ -108,8 +108,8 @@ sub start {
     my $self = shift;
     if ( my $pid = fork() ) {
         # parent.
-        Test::TCP::wait_port($self->port);
         $self->{pid} = $pid;
+        Test::TCP::wait_port($self->port);
         return;
     } elsif ($pid == 0) {
         # child process
