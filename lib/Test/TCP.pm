@@ -21,14 +21,14 @@ sub empty_port {
     my $port = do {
         if (@_) {
             my $p = $_[0];
-            $p = 19000 unless $p =~ /^[0-9]+$/ && $p < 19000;
+            $p = 49152 unless $p =~ /^[0-9]+$/ && $p < 49152;
             $p;
         } else {
-            10000 + int(rand()*1000);
+            50000 + int(rand()*1000);
         }
     };
 
-    while ( $port++ < 20000 ) {
+    while ( $port++ < 60000 ) {
         next if _check_port($port);
         my $sock = IO::Socket::INET->new(
             Listen    => 5,
