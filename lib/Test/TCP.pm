@@ -17,6 +17,8 @@ our @EXPORT = qw/ empty_port test_tcp wait_port /;
 # process does not die when received SIGTERM, on win32.
 my $TERMSIG = $^O eq 'MSWin32' ? 'KILL' : 'TERM';
 
+# get a empty port on 49152 .. 65535
+# http://www.iana.org/assignments/port-numbers
 sub empty_port {
     my $port = do {
         if (@_) {
