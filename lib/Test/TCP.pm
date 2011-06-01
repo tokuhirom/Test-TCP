@@ -132,7 +132,20 @@ sub stop {
     return unless defined $self->{pid};
     return unless $self->{_my_pid} == $$;
 
-    kill $TERMSIG => $self->{pid};
+    # kill is inherently unsafe for pseudo-processes in Windows
+    # and the process calling kill(9, $pid) may be destabilized
+    # The call to Sleep will decrease the frequency of this problems
+    #
+    # SEE ALSO:
+    #   http://www.gossamer-threads.com/lists/perl/porters/261805
+    #   https://rt.cpan.org/Ticket/Display.html?id=67292
+    Win32::Sleep(0) if $^O eq "MSWin32"; # will relinquish the remainder of its time slice
+
+        kill $TERMSIG => $self->{pid};
+
+    Win32::Sleep(0) if $^O eq "MSWin32"; # will relinquish the remainder of its time slice
+
+
     local $?; # waitpid modifies original $?.
     LOOP: while (1) {
         my $kid = waitpid( $self->{pid}, 0 );
