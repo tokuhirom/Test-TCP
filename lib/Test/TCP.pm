@@ -132,6 +132,8 @@ sub stop {
     return unless defined $self->{pid};
     return unless $self->{_my_pid} == $$;
 
+    # This is a workaround for win32 fork emulation's bug.
+    #
     # kill is inherently unsafe for pseudo-processes in Windows
     # and the process calling kill(9, $pid) may be destabilized
     # The call to Sleep will decrease the frequency of this problems
