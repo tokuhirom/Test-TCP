@@ -1,5 +1,12 @@
 Revision history for Perl extension Test::TCP
 
+1.13
+
+    - RT#67292: Tests are blocking in Windows 7.
+      https://rt.cpan.org/Ticket/Display.html?id=67292
+    - change port number range from 10000 .. 11000 to 50000 .. 60000 to respect IANA.
+      https://rt.cpan.org/Ticket/Display.html?id=64012
+
 1.12
 
     - workaround for win32 test fails.
