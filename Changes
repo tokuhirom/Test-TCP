@@ -1,5 +1,13 @@
 Revision history for Perl extension Test::TCP
 
+1.14
+
+    - Fixed testing issue on AIX.
+      https://rt.cpan.org/Public/Bug/Display.html?id=72779
+      (w.phillip.moore)
+    - depend to Test::SharedFork 0.19 for better TB2 support
+      (tokuhirom)
+
 1.13
 
     - RT#67292: Tests are blocking in Windows 7.
