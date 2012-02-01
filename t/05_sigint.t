@@ -16,8 +16,9 @@ if ($pid > 0) {
     sleep 1;
     kill 'INT', $pid;
     waitpid($pid, 0);
-    ok POSIX::WIFSIGNALED(${^CHILD_ERROR_NATIVE});
-    is [split / /, $Config{sig_name}]->[POSIX::WTERMSIG(${^CHILD_ERROR_NATIVE})], 'INT', "sigint";
+    my $child_error = $] > 5.008008 ? ${^CHILD_ERROR_NATIVE} : $?;
+    ok POSIX::WIFSIGNALED($child_error);
+    is [split / /, $Config{sig_name}]->[POSIX::WTERMSIG($child_error)], 'INT', "sigint";
 #   ok $killed_server, "really killed";
 } elsif ($pid == 0) {
 #   $SIG{CHLD} = sub {
