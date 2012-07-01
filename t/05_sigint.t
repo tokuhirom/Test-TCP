@@ -7,6 +7,7 @@ use Test::More;
 use Config;
 
 plan skip_all => "this test requires SIGUSR1" unless $Config{sig_name} =~ /USR1/;
+plan skip_all => "Perl<5.8.8 does not supports \${^CHILD_ERROR_NATIVE}" if $] <= 5.008008;
 plan tests => 2;
 
 my $pid = Test::SharedFork->fork;
@@ -16,9 +17,9 @@ if ($pid > 0) {
     sleep 1;
     kill 'INT', $pid;
     waitpid($pid, 0);
-    my $child_error = $] > 5.008008 ? ${^CHILD_ERROR_NATIVE} : $?;
-    ok POSIX::WIFSIGNALED($child_error);
-    is [split / /, $Config{sig_name}]->[POSIX::WTERMSIG($child_error)], 'INT', "sigint";
+    # NOTE. $? is broken on AIX platform. see also __END__ comments on this file.
+    ok POSIX::WIFSIGNALED(${^CHILD_ERROR_NATIVE});
+    is [split / /, $Config{sig_name}]->[POSIX::WTERMSIG(${^CHILD_ERROR_NATIVE})], 'INT', "sigint";
 #   ok $killed_server, "really killed";
 } elsif ($pid == 0) {
 #   $SIG{CHLD} = sub {
