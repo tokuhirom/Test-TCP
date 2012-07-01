@@ -1,7 +1,14 @@
 Revision history for Perl extension Test::TCP
 
+1.16
+
+    [TEST FIX]
+    - 1.15 breaks AIX fix on 1.14.
+      t/05_sigint.t skips on perl <= 5.8.8.
+
 1.15
 
+    [TEST FIX]
     ${^CHILD_ERROR_NATIVE} is only available in perl 5.8.9 and later.
     (kazeburo++)
 
