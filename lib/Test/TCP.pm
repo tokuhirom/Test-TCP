@@ -11,6 +11,7 @@ use Config;
 use POSIX;
 use Time::HiRes ();
 use Carp ();
+use Test::TCP::CheckPort;
 
 our @EXPORT = qw/ empty_port test_tcp wait_port /;
 
@@ -31,7 +32,7 @@ sub empty_port {
     };
 
     while ( $port++ < 60000 ) {
-        next if _check_port($port);
+        next if check_port($port);
         my $sock = IO::Socket::INET->new(
             Listen    => 5,
             LocalAddr => '127.0.0.1',
@@ -57,29 +58,12 @@ sub test_tcp {
     undef $server; # make sure
 }
 
-sub _check_port {
-    my ($port) = @_;
-
-    my $remote = IO::Socket::INET->new(
-        Proto    => 'tcp',
-        PeerAddr => '127.0.0.1',
-        PeerPort => $port,
-    );
-    if ($remote) {
-        close $remote;
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
-
 sub wait_port {
     my $port = shift;
 
     my $retry = 100;
     while ( $retry-- ) {
-        return if _check_port($port);
+        return if `$^X -MTest::TCP::CheckPort -eshell_check_port $port`;
         Time::HiRes::sleep(0.1);
     }
     die "cannot open port: $port";
