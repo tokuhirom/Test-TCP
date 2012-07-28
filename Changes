@@ -1,5 +1,22 @@
 Revision history for Perl extension Test::TCP
 
+1.17
+
+    commit 0f4510d83ae2f2ce112288c64289fa36d32865b3
+    Author: Christian Walde <walde.christian@googlemail.com>
+    Date:   Sat Jul 28 07:04:40 2012 +0200
+
+        fix port checking on Win32 by performing it in another process
+        
+        On Win32 fork is emulating by creating another thread in the same process.
+        This leads to a possible bug/race condition when a server tries to open a
+        port and listen on it, while in the same process a client tries to connect
+        to the same port. This manifests by the accept call of the server failing
+        with an error of "Bad file descriptor".
+        
+        This is easily fixed by having another process perform the port checking,
+        since that will not interfere with the internals.
+
 1.16
 
     [TEST FIX]

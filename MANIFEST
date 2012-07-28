@@ -1,4 +1,3 @@
-.gitignore
 Changes
 inc/Module/Install.pm
 inc/Module/Install/AuthorTests.pm
@@ -10,6 +9,7 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Test/TCP.pm
+lib/Test/TCP/CheckPort.pm
 Makefile.PL
 MANIFEST			This list of files
 META.yml
