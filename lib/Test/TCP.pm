@@ -237,6 +237,16 @@ Test::TCP is test utilities for TCP/IP programs.
 
 Get the available port number, you can use.
 
+Normally, empty_port() finds empty port number from 49152..65535.
+See L<http://www.iana.org/assignments/port-numbers>
+
+But you want to use another range, use a following form:
+
+    # 5963..65535
+    my $port = empty_port(5963);
+
+
+
 =item test_tcp
 
 Functional interface.
