@@ -36,7 +36,7 @@ sub wait_port {
 
     my $retry = 100;
     while ( $retry-- ) {
-        return if $^O eq 'MSWin32' ? `$^X -MTest::TCP::CheckPort -echeck_port $port` : check_port( $port );
+        return if $^O eq 'MSWin32' ? `$^X -MNet::EmptyPort -echeck_port $port` : check_port( $port );
         Time::HiRes::sleep(0.1);
     }
     die "cannot open port: $port";
