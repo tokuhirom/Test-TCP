@@ -76,7 +76,6 @@ Net::EmptyPort - find a free TCP port
 
 Net::EmptyPort helps finding an empty TCP port.
 
-
 =head1 METHODS
 
 =over 4
@@ -101,7 +100,7 @@ But you want to use another range, use a following form:
 
 Checks if the given port is already in use. Returns true if it is in use (i.e. if the port is NOT free). Returns false if the port is free.
 
-=over 4
+=back
 
 =head1 AUTHOR
 
