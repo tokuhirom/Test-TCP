@@ -8,6 +8,7 @@ inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
+lib/Net/EmptyPort.pm
 lib/Test/TCP.pm
 lib/Test/TCP/CheckPort.pm
 Makefile.PL

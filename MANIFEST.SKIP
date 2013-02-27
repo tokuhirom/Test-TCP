@@ -80,3 +80,4 @@
 ^\.git/
 ^README.pod$
 ^MYMETA.yml$
+^Test-TCP-.*/

@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::TCP
 
+1.19 2013-02-27T14:02:13
+
+    - Split empty_port() function to Net::EmptyPort
+      (Thomas Klausner)
+
 1.18
 
     - Added more documentation about empty_port()
