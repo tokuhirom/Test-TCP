@@ -34,12 +34,8 @@ sub test_tcp {
 sub wait_port {
     my $port = shift;
 
-    my $retry = 100;
-    while ( $retry-- ) {
-        return if $^O eq 'MSWin32' ? `$^X -MNet::EmptyPort -echeck_port $port` : check_port( $port );
-        Time::HiRes::sleep(0.1);
-    }
-    die "cannot open port: $port";
+    Net::EmptyPort::wait_port($port, 0.1, 100)
+        or die "cannot open port: $port";
 }
 
 # ------------------------------------------------------------------------- 

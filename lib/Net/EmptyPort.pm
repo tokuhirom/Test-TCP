@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use base qw/Exporter/;
 use IO::Socket::INET;
+use Time::HiRes ();
 
 our @EXPORT = qw/ empty_port check_port /;
 
@@ -48,6 +49,20 @@ sub check_port {
     else {
         return 0;
     }
+}
+
+sub wait_port {
+    my ($port, $sleep, $retry) = @_;
+    $retry ||= 100;
+    $sleep ||= 0.1;
+
+    while ( $retry-- ) {
+        if ($^O eq 'MSWin32' ? `$^X -MNet::EmptyPort -echeck_port $port` : check_port( $port )) {
+            return 1;
+        }
+        Time::HiRes::sleep($sleep);
+    }
+    return 0;
 }
 
 1;
@@ -99,6 +114,20 @@ But you want to use another range, use a following form:
     my $true_or_false = check_port(5000);
 
 Checks if the given port is already in use. Returns true if it is in use (i.e. if the port is NOT free). Returns false if the port is free.
+
+=item wait_port($port:Int[, $sleep:Number, $retry:Int])
+
+Waits for a particular port is available for connect.
+
+This method waits the C<< $port >> number is ready to accept a request.
+
+C<$port> is a port number to check.
+
+Sleep C<$sleep> seconds after check the port. You can specify C<$sleep> in floating number.
+
+And, retry C<$retry> times.
+
+I<Return value> : Return true if the port is available, false otherwise.
 
 =back
 
