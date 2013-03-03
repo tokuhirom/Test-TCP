@@ -1,5 +1,10 @@
 Revision history for Perl extension Test::TCP
 
+1.21 2013-03-03T12:33:49
+
+    - Added Net::EmptyPort::wait_port()
+      (tokuhirom)
+
 1.20 2013-03-02T18:30:25
 
     - bump up version
