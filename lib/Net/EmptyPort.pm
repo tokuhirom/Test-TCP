@@ -74,7 +74,7 @@ sub wait_port {
     $proto = $proto ? lc($proto) : 'tcp';
 
     while ( $retry-- ) {
-        if ($^O eq 'MSWin32' ? `$^X -MNet::EmptyPort -e"check_port $port,'$proto'"` : check_port( $port, $proto )) {
+        if ($^O eq 'MSWin32' ? `$^X -MTest::TCP::CheckPort -echeck_port $port $proto` : check_port( $port, $proto )) {
             return 1;
         }
         Time::HiRes::sleep($sleep);
