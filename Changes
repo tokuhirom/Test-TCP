@@ -2,6 +2,10 @@ Revision history for Perl extension Test::TCP
 
 {{$NEXT}}
 
+1.23 2013-03-27T01:37:08Z
+
+    - Just re-packaging
+
 1.22 2013-03-27T01:17:38Z
 
     - Add doc for Test::TCP::CheckPort
