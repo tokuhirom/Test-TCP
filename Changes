@@ -1,5 +1,17 @@
 Revision history for Perl extension Test::TCP
 
+{{$NEXT}}
+
+1.22 2013-03-27T01:17:38Z
+
+    - Add doc for Test::TCP::CheckPort
+      (Tatsuhiko Miyagawa)
+    - revert b4fc237697648234c960f6714d995210d4250e42 to fix Win32 breakage
+      Test::TCP::CheckPort must be used on win32 because it prints to STDOUT
+      (Christian Walde)
+    - Add UDP support to Net::EmptyPort
+      (Brendan Byrd)
+
 1.21 2013-03-03T12:33:49
 
     - Added Net::EmptyPort::wait_port()
