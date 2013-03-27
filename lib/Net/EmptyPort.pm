@@ -11,7 +11,7 @@ our @EXPORT = qw/ empty_port check_port /;
 # http://www.iana.org/assignments/port-numbers
 sub empty_port {
     my $port = do {
-        if (@_) {
+        if (defined $_[0]) {
             my $p = $_[0];
             $p = 49152 unless $p =~ /^[0-9]+$/ && $p < 49152;
             $p;
@@ -19,14 +19,17 @@ sub empty_port {
             50000 + int(rand()*1000);
         }
     };
+    my $proto = $_[1] ? lc($_[1]) : 'tcp';
 
     while ( $port++ < 60000 ) {
-        next if check_port($port);
+        # Remote checks don't work on UDP, and Local checks would be redundant here...
+        next if ($proto eq 'tcp' && check_port($port));
+
         my $sock = IO::Socket::INET->new(
-            Listen    => 5,
+            (($proto eq 'udp') ? () : (Listen => 5)),
             LocalAddr => '127.0.0.1',
             LocalPort => $port,
-            Proto     => 'tcp',
+            Proto     => $proto,
             (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
         );
         return $port if $sock;
@@ -35,29 +38,43 @@ sub empty_port {
 }
 
 sub check_port {
-    my ($port) = @_;
+    my $port = $_[0];
+    my $proto = $_[1] ? lc($_[1]) : 'tcp';
 
-    my $remote = IO::Socket::INET->new(
-        Proto    => 'tcp',
-        PeerAddr => '127.0.0.1',
-        PeerPort => $port,
-    );
-    if ($remote) {
-        close $remote;
+    # for TCP, we do a remote port check
+    # for UDP, we do a local port check, like empty_port does
+    my $sock = ($proto eq 'tcp') ?
+        IO::Socket::INET->new(
+            Proto    => 'tcp',
+            PeerAddr => '127.0.0.1',
+            PeerPort => $port,
+        ) :
+        IO::Socket::INET->new(
+            Proto     => $proto,
+            LocalAddr => '127.0.0.1',
+            LocalPort => $port,
+            (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
+        )
+    ;
+
+    if ($sock) {
+        close $sock;
         return 1;
     }
     else {
         return 0;
     }
+
 }
 
 sub wait_port {
-    my ($port, $sleep, $retry) = @_;
+    my ($port, $sleep, $retry, $proto) = @_;
     $retry ||= 100;
     $sleep ||= 0.1;
+    $proto = $proto ? lc($proto) : 'tcp';
 
     while ( $retry-- ) {
-        if ($^O eq 'MSWin32' ? `$^X -MNet::EmptyPort -echeck_port $port` : check_port( $port )) {
+        if ($^O eq 'MSWin32' ? `$^X -MTest::TCP::CheckPort -echeck_port $port $proto` : check_port( $port, $proto )) {
             return 1;
         }
         Time::HiRes::sleep($sleep);
@@ -73,7 +90,7 @@ __END__
 
 =head1 NAME
 
-Net::EmptyPort - find a free TCP port
+Net::EmptyPort - find a free TCP/UDP port
 
 =head1 SYNOPSIS
 
@@ -89,7 +106,7 @@ Net::EmptyPort - find a free TCP port
 
 =head1 DESCRIPTION
 
-Net::EmptyPort helps finding an empty TCP port.
+Net::EmptyPort helps finding an empty TCP/UDP port.
 
 =head1 METHODS
 
@@ -109,13 +126,24 @@ But you want to use another range, use a following form:
     # 5963..65535
     my $port = empty_port(5963);
 
+You can also find an empty UDP port by specifying the protocol as
+the second parameter:
+
+    my $port = empty_port(1024, 'udp');
+    # use 49152..65535 range
+    my $port = empty_port(undef, 'udp');
+
 =item check_port
 
     my $true_or_false = check_port(5000);
 
 Checks if the given port is already in use. Returns true if it is in use (i.e. if the port is NOT free). Returns false if the port is free.
 
-=item wait_port($port:Int[, $sleep:Number, $retry:Int])
+Also works for UDP:
+
+    my $true_or_false = check_port(5000, 'udp');
+
+=item wait_port($port:Int[, $sleep:Number, $retry:Int, $proto:String])
 
 Waits for a particular port is available for connect.
 
