@@ -4,6 +4,8 @@ use Test::More tests => 11;
 use Net::EmptyPort qw(empty_port check_port);
 use IO::Socket::INET;
 
+# This UDP test case does not portable if there is DNS cache server.
+
 my ($port, $new_port, $sock);
 
 foreach my $proto_uc ('TCP', 'UDP') {
