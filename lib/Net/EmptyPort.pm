@@ -59,10 +59,10 @@ sub check_port {
 
     if ($sock) {
         close $sock;
-        return 1;
+        return 1; # The port is used.
     }
     else {
-        return 0;
+        return 0; # The port is not used.
     }
 
 }
