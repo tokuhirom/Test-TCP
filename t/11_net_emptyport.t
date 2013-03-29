@@ -11,6 +11,8 @@ foreach my $proto_uc ('TCP', 'UDP') {
     $port = empty_port(5000, $proto);
     ok( $port, $proto_uc.': port found via empty_port' );
 
+    diag "Testing with: $port - $proto";
+
     $sock = new_ok( 'IO::Socket::INET' => [
         (($proto eq 'udp') ? () : (Listen => 5)),
         LocalAddr => '127.0.0.1',
