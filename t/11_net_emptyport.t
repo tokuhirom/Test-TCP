@@ -11,7 +11,7 @@ foreach my $proto_uc ('TCP', 'UDP') {
     $port = empty_port(5000, $proto);
     ok( $port, $proto_uc.': port found via empty_port' );
 
-    diag "Testing with: $port - $proto";
+    diag "Port: $port - $proto";
 
     $sock = new_ok( 'IO::Socket::INET' => [
         (($proto eq 'udp') ? () : (Listen => 5)),
@@ -23,6 +23,7 @@ foreach my $proto_uc ('TCP', 'UDP') {
 
     $new_port = empty_port($port, $proto);
     isnt( $new_port, $port, $proto_uc.': different port found via empty_port' );
+    diag "New port: $new_port - $proto";
 
     $sock->close;
     $sock = new_ok( 'IO::Socket::INET' => [
