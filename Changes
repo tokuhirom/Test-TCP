@@ -2,6 +2,10 @@ Revision history for Perl extension Test::TCP
 
 {{$NEXT}}
 
+1.26 2013-03-29T08:46:20Z
+
+    - Remove unused deps from cpanfile.
+
 1.25 2013-03-29T08:07:24Z
 
     - re packaging, again & again
