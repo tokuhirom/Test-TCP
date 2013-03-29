@@ -16,15 +16,13 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.59",
             "Test::More" : "0.98"
          }
       },
       "configure" : {
          "requires" : {
             "CPAN::Meta" : "0",
-            "Module::Build" : "0.38",
-            "Module::Build::Tiny" : "0"
+            "Module::Build" : "0.38"
          }
       },
       "develop" : {
