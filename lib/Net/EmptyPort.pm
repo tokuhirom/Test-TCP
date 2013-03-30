@@ -5,7 +5,7 @@ use base qw/Exporter/;
 use IO::Socket::INET;
 use Time::HiRes ();
 
-our @EXPORT = qw/ empty_port check_port /;
+our @EXPORT = qw/ empty_port check_port wait_port /;
 
 # get a empty port on 49152 .. 65535
 # http://www.iana.org/assignments/port-numbers
