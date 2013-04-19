@@ -128,6 +128,8 @@ sub DESTROY {
 1;
 __END__
 
+=for stopwords OO-ish
+
 =encoding utf8
 
 =head1 NAME
