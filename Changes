@@ -2,6 +2,14 @@ Revision history for Perl extension Test::TCP
 
 {{$NEXT}}
 
+1.27 2013-05-15T10:13:18Z
+
+    - export wait_port from Net::EmptyPort
+      (Pavel Shaydo)
+    - Make default wait_port() sleeping time shorter.
+      0.1sec => 0.0001sec.
+      (tokuhirom)
+
 1.26 2013-03-29T08:46:20Z
 
     - Remove unused deps from cpanfile.

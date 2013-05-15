@@ -1,7 +1,17 @@
-requires 'perl', '5.00800';
+requires 'perl', 5.008_001;
 requires 'IO::Socket::INET';
 requires 'Test::SharedFork', '0.19';
+requires 'Test::More';
+requires 'Time::HiRes';
 
-on build => sub {
+on test => sub {
     requires 'Test::More', '0.98';
+    requires 'File::Temp';
+    requires 'Socket';
+};
+
+
+on develop => sub {
+    requires 'Perl::Critic', '1.105';
+    requires 'Test::Perl::Critic', '1.02';
 };
