@@ -34,7 +34,7 @@ sub test_tcp {
 sub wait_port {
     my $port = shift;
 
-    Net::EmptyPort::wait_port($port, 0.1, 100)
+    Net::EmptyPort::wait_port($port, 0.001, 100)
         or die "cannot open port: $port";
 }
 
