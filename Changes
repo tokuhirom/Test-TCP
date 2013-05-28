@@ -2,6 +2,12 @@ Revision history for Perl extension Test::TCP
 
 {{$NEXT}}
 
+1.28 2013-05-28T11:14:27Z
+
+    - Added wait_port_sleep and wait_port_retry option for
+      Test::TCP::wait_port, Test::TCP#new, test_tcp().
+      (tokuhirom)
+
 1.27 2013-05-15T10:13:18Z
 
     - export wait_port from Net::EmptyPort
