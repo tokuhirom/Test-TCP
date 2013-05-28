@@ -65,7 +65,11 @@ Test::TCP is test utilities for TCP/IP programs.
             },
             # optional
             port => 8080
+            wait_port_sleep => 0.001,
+            wait_port_retry => 100,
         );
+
+
 
 - wait\_port
 
@@ -92,6 +96,22 @@ Test::TCP is test utilities for TCP/IP programs.
         The callback function. Argument for callback function is: `$code->($pid)`.
 
         This parameter is required.
+
+    - $args{wait\_port\_retry} : Number
+
+        Retry `$wait_port_retry` times in waiting ports.
+
+        See also [Net::EmptyPort](http://search.cpan.org/perldoc?Net::EmptyPort).
+
+        _Default: 0.001_
+
+    - $args{wait\_port\_sleep} : Number
+
+        Sleep `$wait_port_sleep` seconds before checking port.
+
+        See also [Net::EmptyPort](http://search.cpan.org/perldoc?Net::EmptyPort).
+
+        _Default: 100_
 
 - $server->start()
 

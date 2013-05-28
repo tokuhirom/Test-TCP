@@ -69,11 +69,11 @@ sub check_port {
 
 sub wait_port {
     my ($port, $sleep, $retry, $proto) = @_;
-    $retry ||= 100;
     $sleep ||= 0.1;
+    $retry ||= 100;
     $proto = $proto ? lc($proto) : 'tcp';
 
-    while ( $retry-- ) {
+    while ( $retry-- > 0 ) {
         if ($^O eq 'MSWin32' ? `$^X -MTest::TCP::CheckPort -echeck_port $port $proto` : check_port( $port, $proto )) {
             return 1;
         }
