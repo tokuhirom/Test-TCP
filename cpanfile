@@ -14,4 +14,5 @@ on test => sub {
 on develop => sub {
     requires 'Perl::Critic', '1.105';
     requires 'Test::Perl::Critic', '1.02';
+    requires 'File::Which';
 };

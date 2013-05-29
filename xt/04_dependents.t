@@ -3,12 +3,19 @@ use warnings;
  
 use Test::More 0.98;
 
-plan skip_all => "AUTHOR_TESTING is required." unless $ENV{AUTHOR_TESTING};
+BEGIN {
+    plan skip_all => "AUTHOR_TESTING is required." unless $ENV{AUTHOR_TESTING};
+}
 
-eval "use Test::DependentModules qw( test_module )";
-plan skip_all => "Test::DependentModules required for testing dependent modules" if $@;
- 
-test_module('Monoceros');
-test_module('Plack');
+use File::Which;
+use File::Temp qw(tempdir);
+
+plan skip_all => "No cpanm" unless which('cpanm');
+
+my $tmp = tempdir(CLEANUP => 1);
+is(system("cpanm --notest -l $tmp ."), 0);
+for (qw(Monoceros Plack)) {
+    is(system("cpanm -l $tmp --reinstall $_"), 0, $_);
+}
 
 done_testing;
