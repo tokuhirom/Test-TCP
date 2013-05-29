@@ -24,7 +24,7 @@ sub test_tcp {
         die "missing madatory parameter $k" unless exists $args{$k};
     }
     my $server_code = delete $args{server};
-    my $port = $args{port} || empty_port();
+    my $port = delete($args{port}) || empty_port();
 
     my $client_code = delete $args{client};
 
