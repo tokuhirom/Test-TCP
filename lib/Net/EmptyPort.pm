@@ -67,17 +67,32 @@ sub check_port {
 
 }
 
+sub _make_waiter {
+    my $max_wait = shift;
+    my $waited = 0;
+    my $sleep  = 0.001;
+
+    return sub {
+        return 0 if $waited > $max_wait;
+
+        Time::HiRes::sleep($sleep);
+        $waited += $sleep;
+        $sleep  *= 2;
+
+        return 1;
+    };
+}
+
 sub wait_port {
-    my ($port, $sleep, $retry, $proto) = @_;
-    $sleep ||= 0.1;
-    $retry ||= 100;
+    my ($port, $max_wait, $proto) = @_;
     $proto = $proto ? lc($proto) : 'tcp';
 
-    while ( $retry-- > 0 ) {
+    my $waiter = _make_waiter($max_wait);
+
+    while ( $waiter->() ) {
         if ($^O eq 'MSWin32' ? `$^X -MTest::TCP::CheckPort -echeck_port $port $proto` : check_port( $port, $proto )) {
             return 1;
         }
-        Time::HiRes::sleep($sleep);
     }
     return 0;
 }
@@ -143,7 +158,7 @@ Also works for UDP:
 
     my $true_or_false = check_port(5000, 'udp');
 
-=item C<< wait_port($port:Int[, $sleep:Number, $retry:Int, $proto:String]) >>
+=item C<< wait_port($port:Int[, $max_wait:Number,$proto:String]) >>
 
 Waits for a particular port is available for connect.
 
@@ -151,9 +166,7 @@ This method waits the C<< $port >> number is ready to accept a request.
 
 C<$port> is a port number to check.
 
-Sleep C<$sleep> seconds after check the port. You can specify C<$sleep> in floating number.
-
-And, retry C<$retry> times.
+Sleep up to C<$max_wait> seconds for checking the port.
 
 I<Return value> : Return true if the port is available, false otherwise.
 

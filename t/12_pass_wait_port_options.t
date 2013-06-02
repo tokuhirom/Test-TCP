@@ -4,31 +4,28 @@ use utf8;
 use Test::More;
 use Test::TCP;
 
-my ($port, $sleep, $retry);
+my ($port, $max_wait);
 {
     no warnings 'redefine';
     *Net::EmptyPort::wait_port = sub {
-        ($port, $sleep, $retry) = @_;
+        ($port, $max_wait) = @_;
         1;
     };
 }
 
 # Test::TCP::wait_port arguments are passed to Net::EmptyPort::wait_port.
 {
-    Test::TCP::wait_port(1, 0.00001, 3);
-    is($sleep, 0.00001);
-    is($retry, 3);
+    Test::TCP::wait_port(1, 1);
+    is($max_wait, 1);
 }
 
 # Test::TCP#new arguments are passed to Net::EmptyPort::wait_port.
 {
     my $tcp = Test::TCP->new(
         code => sub { },
-        wait_port_retry => 4,
-        wait_port_sleep => 0.00008,
+        max_wait => 3,
     );
-    is($sleep, 0.00008);
-    is($retry, 4);
+    is($max_wait, 3);
 }
 
 # test_tcp() arguments are passed to Net::EmptyPort::wait_port.
@@ -38,11 +35,9 @@ my ($port, $sleep, $retry);
         },
         server => sub {
         },
-        wait_port_retry => 2,
-        wait_port_sleep => 0.00009,
+        max_wait => 2,
     );
-    is($sleep, 0.00009);
-    is($retry, 2);
+    is($max_wait, 2);
 }
 
 done_testing;
