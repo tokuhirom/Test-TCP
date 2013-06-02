@@ -39,8 +39,8 @@ sub test_tcp {
 
 sub wait_port {
     my ($port, $sleep, $retry) = @_;
-    $sleep ||= 0.001;
-    $retry ||= 100;
+    $sleep ||= 0.01;
+    $retry ||= 1000;
 
     Net::EmptyPort::wait_port($port, $sleep, $retry)
         or die "cannot open port: $port";
@@ -211,8 +211,8 @@ Functional interface.
         },
         # optional
         port => 8080
-        wait_port_sleep => 0.001,
-        wait_port_retry => 100,
+        wait_port_sleep => 0.01,
+        wait_port_retry => 1000,
     );
 
 
@@ -254,7 +254,7 @@ Retry C<$wait_port_retry> times in waiting ports.
 
 See also L<Net::EmptyPort>.
 
-I<Default: 0.001>
+I<Default: 0.01>
 
 =item $args{wait_port_sleep} : Number
 
@@ -262,7 +262,7 @@ Sleep C<$wait_port_sleep> seconds before checking port.
 
 See also L<Net::EmptyPort>.
 
-I<Default: 100>
+I<Default: 1000>
 
 =back
 
