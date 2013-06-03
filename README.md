@@ -65,8 +65,8 @@ Test::TCP is test utilities for TCP/IP programs.
             },
             # optional
             port => 8080
-            wait_port_sleep => 0.001,
-            wait_port_retry => 100,
+            wait_port_sleep => 0.01,
+            wait_port_retry => 1000,
         );
 
 
@@ -103,7 +103,7 @@ Test::TCP is test utilities for TCP/IP programs.
 
         See also [Net::EmptyPort](http://search.cpan.org/perldoc?Net::EmptyPort).
 
-        _Default: 0.001_
+        _Default: 0.01_
 
     - $args{wait\_port\_sleep} : Number
 
@@ -111,7 +111,7 @@ Test::TCP is test utilities for TCP/IP programs.
 
         See also [Net::EmptyPort](http://search.cpan.org/perldoc?Net::EmptyPort).
 
-        _Default: 100_
+        _Default: 1000_
 
 - $server->start()
 

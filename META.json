@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.4.3, CPAN::Meta::Converter version 2.130880",
+   "generated_by" : "Minilla/v0.4.5, CPAN::Meta::Converter version 2.131490",
    "license" : [
       "perl_5"
    ],
@@ -34,6 +34,7 @@
       },
       "develop" : {
          "requires" : {
+            "File::Which" : "0",
             "Perl::Critic" : "1.105",
             "Test::CPAN::Meta" : "0",
             "Test::MinimumVersion" : "0.10108",
@@ -71,7 +72,7 @@
          "web" : "https://github.com/tokuhirom/Test-TCP"
       }
    },
-   "version" : "1.29",
+   "version" : "1.30",
    "x_contributors" : [
       "tokuhirom <tokuhirom@d0d07461-0603-4401-acd4-de1884942a52>",
       "mattn <mattn@d0d07461-0603-4401-acd4-de1884942a52>",
@@ -84,7 +85,7 @@
       "Thomas Klausner <domm@plix.at>",
       "Brendan Byrd <Perl@ResonatorSoft.org>",
       "Christian Walde <walde.christian@googlemail.com>",
-      "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
-      "Pavel Shaydo <zwon@cpan.org>"
+      "Pavel Shaydo <zwon@cpan.org>",
+      "Tatsuhiko Miyagawa <miyagawa@bulknews.net>"
    ]
 }
