@@ -55,8 +55,8 @@ sub new {
     Carp::croak("missing mandatory parameter 'code'") unless exists $args{code};
     my $self = bless {
         auto_start => 1,
-        wait_port_sleep => 0.001,
-        wait_port_retry => 100,
+        wait_port_sleep => 0.01,
+        wait_port_retry => 1000,
         _my_pid    => $$,
         %args,
     }, $class;
