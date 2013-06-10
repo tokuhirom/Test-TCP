@@ -38,11 +38,10 @@ sub test_tcp {
 }
 
 sub wait_port {
-    my ($port, $sleep, $retry) = @_;
-    $sleep ||= 0.01;
-    $retry ||= 1000;
+    my ($port, $max_wait) = @_;
+    $max_wait ||= 10;
 
-    Net::EmptyPort::wait_port($port, $sleep, $retry)
+    Net::EmptyPort::wait_port($port, $max_wait)
         or die "cannot open port: $port";
 }
 
@@ -55,8 +54,7 @@ sub new {
     Carp::croak("missing mandatory parameter 'code'") unless exists $args{code};
     my $self = bless {
         auto_start => 1,
-        wait_port_sleep => 0.001,
-        wait_port_retry => 100,
+        max_wait   => 10,
         _my_pid    => $$,
         %args,
     }, $class;
@@ -74,7 +72,7 @@ sub start {
     if ( my $pid = fork() ) {
         # parent.
         $self->{pid} = $pid;
-        Test::TCP::wait_port($self->port, $self->{wait_port_sleep}, $self->{wait_port_retry});
+        Test::TCP::wait_port($self->port, $self->{max_wait});
         return;
     } elsif ($pid == 0) {
         # child process
@@ -210,9 +208,8 @@ Functional interface.
             # run server
         },
         # optional
-        port => 8080
-        wait_port_sleep => 0.01,
-        wait_port_retry => 1000,
+        port => 8080,
+        max_wait => 3, # seconds
     );
 
 
@@ -248,21 +245,13 @@ The callback function. Argument for callback function is: C<< $code->($pid) >>.
 
 This parameter is required.
 
-=item $args{wait_port_retry} : Number
+=item $args{max_wait} : Number
 
-Retry C<$wait_port_retry> times in waiting ports.
-
-See also L<Net::EmptyPort>.
-
-I<Default: 0.01>
-
-=item $args{wait_port_sleep} : Number
-
-Sleep C<$wait_port_sleep> seconds before checking port.
+Will wait for at most C<$max_wait> seconds before checking port.
 
 See also L<Net::EmptyPort>.
 
-I<Default: 1000>
+I<Default: 10>
 
 =back
 
