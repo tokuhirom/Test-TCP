@@ -64,9 +64,8 @@ Test::TCP is test utilities for TCP/IP programs.
                 # run server
             },
             # optional
-            port => 8080
-            wait_port_sleep => 0.01,
-            wait_port_retry => 1000,
+            port => 8080,
+            max_wait => 3, # seconds
         );
 
 
@@ -97,21 +96,13 @@ Test::TCP is test utilities for TCP/IP programs.
 
         This parameter is required.
 
-    - $args{wait\_port\_retry} : Number
+    - $args{max\_wait} : Number
 
-        Retry `$wait_port_retry` times in waiting ports.
-
-        See also [Net::EmptyPort](http://search.cpan.org/perldoc?Net::EmptyPort).
-
-        _Default: 0.01_
-
-    - $args{wait\_port\_sleep} : Number
-
-        Sleep `$wait_port_sleep` seconds before checking port.
+        Will wait for at most `$max_wait` seconds before checking port.
 
         See also [Net::EmptyPort](http://search.cpan.org/perldoc?Net::EmptyPort).
 
-        _Default: 1000_
+        _Default: 10_
 
 - $server->start()
 

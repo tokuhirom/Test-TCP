@@ -25,7 +25,7 @@ my %args = (
 
     name            => 'Test-TCP',
     module_name     => 'Test::TCP',
-    allow_pure_perl => 0,
+    allow_pureperl => 0,
 
     script_files => [glob('script/*'), glob('bin/*')],
 

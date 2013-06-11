@@ -2,6 +2,8 @@ Revision history for Perl extension Test::TCP
 
 {{$NEXT}}
 
+2.00 2013-06-11T04:41:43Z
+
     [INCOMPATIBLE CHANGES]
     - Change wait_port() API to take max_wait seconds, and wait exponentially.
       Dropped wait_port_retry argument introduced at 1.27.
