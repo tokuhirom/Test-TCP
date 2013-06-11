@@ -38,7 +38,14 @@ sub test_tcp {
 }
 
 sub wait_port {
-    my ($port, $max_wait) = @_;
+    my ($port, $max_wait);
+    if (@_==3) {
+        # backward compat
+        ($port, (my $sleep), (my $retry)) = @_;
+        $max_wait = $sleep * $retry;
+    }  else {
+        ($port, $max_wait) = @_;
+    }
     $max_wait ||= 10;
 
     Net::EmptyPort::wait_port($port, $max_wait)

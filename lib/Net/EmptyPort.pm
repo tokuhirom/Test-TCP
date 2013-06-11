@@ -84,8 +84,16 @@ sub _make_waiter {
 }
 
 sub wait_port {
-    my ($port, $max_wait, $proto) = @_;
-    $proto = $proto ? lc($proto) : 'tcp';
+    my ($port, $max_wait, $proto);
+    if (@_==4) {
+        # backward compat.
+        ($port, (my $sleep), (my $retry), $proto) = @_;
+        $max_wait = $max_wait*$retry;
+        $proto = $proto ? lc($proto) : 'tcp';
+    } else {
+        ($port, $max_wait, $proto) = @_;
+        $proto = $proto ? lc($proto) : 'tcp';
+    }
 
     my $waiter = _make_waiter($max_wait);
 
@@ -169,6 +177,8 @@ C<$port> is a port number to check.
 Sleep up to C<$max_wait> seconds for checking the port.
 
 I<Return value> : Return true if the port is available, false otherwise.
+
+B<Incompatible changes>: Before 2.0, C<< wait_port($port:Int[, $sleep:Number, $retry:Int, $proto:String]) >> is a signature.
 
 =back
 
