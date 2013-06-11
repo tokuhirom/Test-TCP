@@ -2,7 +2,17 @@ use warnings;
 use strict;
 use Test::More tests => 11;
 use Net::EmptyPort qw(empty_port check_port);
-use IO::Socket::INET;
+
+our $io_socket_module_name;
+BEGIN {
+  if (eval { require IO::Socket::IP }) {
+    $io_socket_module_name = 'IO::Socket::IP';
+  } elsif (eval { require IO::Socket::INET6 }) {
+    $io_socket_module_name = 'IO::Socket::INET6';
+  } elsif (eval { require IO::Socket::INET }) {
+    $io_socket_module_name = 'IO::Socket::INET';
+  }
+}
 
 # This UDP test case does not portable if there is DNS cache server.
 
@@ -15,9 +25,9 @@ foreach my $proto_uc ('TCP', 'UDP') {
 
     diag "Port: $port - $proto";
 
-    $sock = new_ok( 'IO::Socket::INET' => [
+    $sock = new_ok( $io_socket_module_name => [
         (($proto eq 'udp') ? () : (Listen => 5)),
-        LocalAddr => '127.0.0.1',
+        LocalAddr => 'localhost',
         LocalPort => $port,
         Proto     => $proto,
         (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
@@ -28,12 +38,12 @@ foreach my $proto_uc ('TCP', 'UDP') {
     diag "New port: $new_port - $proto";
 
     $sock->close;
-    $sock = new_ok( 'IO::Socket::INET' => [
+    $sock = new_ok( $io_socket_module_name => [
         (($proto eq 'udp') ? () : (Listen => 5)),
-        LocalAddr => '127.0.0.1',
+        LocalAddr => 'localhost',
         LocalPort => $port,
-        PeerAddr  => '127.0.0.1',
-        PeerPort  => $new_port,
+      # PeerAddr  => 'localhost',
+      # PeerPort  => $new_port,
         Proto     => $proto,
         (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
     ] );
