@@ -2,10 +2,21 @@ package Net::EmptyPort;
 use strict;
 use warnings;
 use base qw/Exporter/;
-use IO::Socket::INET;
+use IO::Socket;
 use Time::HiRes ();
 
 our @EXPORT = qw/ empty_port check_port wait_port /;
+
+our $io_socket_module_name;
+BEGIN {
+  if (eval { require IO::Socket::IP }) {
+    $io_socket_module_name = 'IO::Socket::IP';
+  } elsif (eval { require IO::Socket::INET6 }) {
+    $io_socket_module_name = 'IO::Socket::INET6';
+  } elsif (eval { require IO::Socket::INET }) {
+    $io_socket_module_name = 'IO::Socket::INET';
+  }
+}
 
 # get a empty port on 49152 .. 65535
 # http://www.iana.org/assignments/port-numbers
@@ -25,9 +36,9 @@ sub empty_port {
         # Remote checks don't work on UDP, and Local checks would be redundant here...
         next if ($proto eq 'tcp' && check_port($port));
 
-        my $sock = IO::Socket::INET->new(
+        my $sock = $io_socket_module_name->new(
             (($proto eq 'udp') ? () : (Listen => 5)),
-            LocalAddr => '127.0.0.1',
+            LocalAddr => 'localhost',
             LocalPort => $port,
             Proto     => $proto,
             (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
@@ -44,14 +55,14 @@ sub check_port {
     # for TCP, we do a remote port check
     # for UDP, we do a local port check, like empty_port does
     my $sock = ($proto eq 'tcp') ?
-        IO::Socket::INET->new(
+        $io_socket_module_name->new(
             Proto    => 'tcp',
-            PeerAddr => '127.0.0.1',
+            PeerAddr => 'localhost',
             PeerPort => $port,
         ) :
-        IO::Socket::INET->new(
+        $io_socket_module_name->new(
             Proto     => $proto,
-            LocalAddr => '127.0.0.1',
+            LocalAddr => 'localhost',
             LocalPort => $port,
             (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
         )

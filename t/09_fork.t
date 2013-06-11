@@ -3,6 +3,17 @@ use Test::More tests => 6;
 use Test::TCP;
 use t::Server;
 
+our $io_socket_module_name;
+BEGIN {
+  if (eval { require IO::Socket::IP }) {
+    $io_socket_module_name = 'IO::Socket::IP';
+  } elsif (eval { require IO::Socket::INET6 }) {
+    $io_socket_module_name = 'IO::Socket::INET6';
+  } elsif (eval { require IO::Socket::INET }) {
+    $io_socket_module_name = 'IO::Socket::INET';
+  }
+}
+
 test_tcp 
     client => sub {
         my $port = shift;
@@ -27,9 +38,9 @@ test_tcp
 
         # after the child has exited, we need to make sure that
         # the server hasn't gone away.
-        my $sock = IO::Socket::INET->new(
+        my $sock = $io_socket_module_name->new(
             PeerPort => $port,
-            PeerAddr => '127.0.0.1',
+            PeerAddr => 'localhost',
             Proto    => 'tcp'
         );
         if (! ok $sock, "socket is connected") {

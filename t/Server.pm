@@ -2,15 +2,26 @@ package t::Server;
 use strict;
 use warnings;
 use base qw/Exporter/;
-use IO::Socket::INET;
+use IO::Socket;
 
 our @EXPORT = qw/new_sock/;
 
+our $io_socket_module_name;
+BEGIN {
+  if (eval { require IO::Socket::IP }) {
+    $io_socket_module_name = 'IO::Socket::IP';
+  } elsif (eval { require IO::Socket::INET6 }) {
+    $io_socket_module_name = 'IO::Socket::INET6';
+  } elsif (eval { require IO::Socket::INET }) {
+    $io_socket_module_name = 'IO::Socket::INET';
+  }
+}
+
 sub new_sock {
     my $port = shift;
-    my $sock = IO::Socket::INET->new(
+    my $sock = $io_socket_module_name->new(
         LocalPort => $port,
-        LocalAddr => '127.0.0.1',
+        LocalAddr => 'localhost',
         Proto     => 'tcp',
         Listen    => 5,
         Type      => SOCK_STREAM,

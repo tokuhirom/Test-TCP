@@ -2,7 +2,6 @@ use warnings;
 use strict;
 use Test::More tests => 3;
 use Test::TCP;
-use IO::Socket::INET;
 use t::Server;
 
 my $child_pid;
