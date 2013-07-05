@@ -1,6 +1,7 @@
 Revision history for Perl extension Test::TCP
 
 {{$NEXT}}
+    - add `empty_port_multi` to get a set of distinct empty ports
 
 2.00 2013-06-11T04:41:43Z
 
