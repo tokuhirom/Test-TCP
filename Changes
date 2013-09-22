@@ -2,6 +2,17 @@ Revision history for Perl extension Test::TCP
 
 {{$NEXT}}
 
+2.01 2013-09-22T04:13:53Z
+
+    commit 95cd6a0669d422e10f2d3b09f35346c86f7e3257
+    Author: Christian Walde <walde.christian@googlemail.com>
+    Date:   Sat Sep 21 16:19:49 2013 +0200
+
+        test waitport argument by running full code-chain, not with partial mocking
+        
+        The partial mocks cause stuck forks on win32 at times, causing the test to
+        hang. With the full code chain present the test runs reliably
+
 2.00 2013-06-11T04:41:43Z
 
     [INCOMPATIBLE CHANGES]
