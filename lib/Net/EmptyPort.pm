@@ -16,12 +16,12 @@ sub empty_port {
             $p = 49152 unless $p =~ /^[0-9]+$/ && $p < 49152;
             $p;
         } else {
-            50000 + int(rand()*1000);
+            50000 + (int(rand()*1500) + $$) % 1500;
         }
     };
     my $proto = $_[1] ? lc($_[1]) : 'tcp';
 
-    while ( $port++ < 60000 ) {
+    while ( $port++ < 65000 ) {
         # Remote checks don't work on UDP, and Local checks would be redundant here...
         next if ($proto eq 'tcp' && check_port($port));
 
