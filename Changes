@@ -2,6 +2,11 @@ Revision history for Perl extension Test::TCP
 
 {{$NEXT}}
 
+2.02 2013-10-30T03:22:39Z
+
+    - Fixed fork(2) error handling.
+      (tokuhirom)
+
 2.01 2013-09-22T04:13:53Z
 
     commit 95cd6a0669d422e10f2d3b09f35346c86f7e3257
