@@ -18,6 +18,10 @@ if ($pid > 0) {
     kill 'INT', $pid;
     waitpid($pid, 0);
     # NOTE. $? is broken on AIX platform. see also __END__ comments on this file.
+    diag "\$Config{sig_name}: " . $Config{sig_name};
+    diag "CHILD_ERROR_NATIVE: " . ${^CHILD_ERROR_NATIVE};
+    diag "\$?: " . $?;
+
     ok POSIX::WIFSIGNALED(${^CHILD_ERROR_NATIVE});
     is [split / /, $Config{sig_name}]->[POSIX::WTERMSIG(${^CHILD_ERROR_NATIVE})], 'INT', "sigint";
 #   ok $killed_server, "really killed";
