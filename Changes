@@ -1,4 +1,4 @@
-Revision history for Perl extension Test::TCP
+Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
@@ -9,14 +9,11 @@ Revision history for Perl extension Test::TCP
 
 2.01 2013-09-22T04:13:53Z
 
-    commit 95cd6a0669d422e10f2d3b09f35346c86f7e3257
-    Author: Christian Walde <walde.christian@googlemail.com>
-    Date:   Sat Sep 21 16:19:49 2013 +0200
-
-        test waitport argument by running full code-chain, not with partial mocking
+    [Changes from MITHALDU (Christian Walde)]
+    - test waitport argument by running full code-chain, not with partial mocking
         
-        The partial mocks cause stuck forks on win32 at times, causing the test to
-        hang. With the full code chain present the test runs reliably
+    - The partial mocks cause stuck forks on win32 at times, causing the test to
+      hang. With the full code chain present the test runs reliably
 
 2.00 2013-06-11T04:41:43Z
 
@@ -61,7 +58,6 @@ Revision history for Perl extension Test::TCP
 
     - re-packing, again.
 
-
 1.23 2013-03-27T01:37:08Z
 
     - Just re-packaging
@@ -90,40 +86,38 @@ Revision history for Perl extension Test::TCP
     - Split empty_port() function to Net::EmptyPort
       (Thomas Klausner)
 
-1.18
+1.18 2012-10-25
 
     - Added more documentation about empty_port()
 
-1.17
+1.17 2012-07-27
 
-    commit 0f4510d83ae2f2ce112288c64289fa36d32865b3
-    Author: Christian Walde <walde.christian@googlemail.com>
-    Date:   Sat Jul 28 07:04:40 2012 +0200
+    [Changes from MITHALDU (Christian Walde)]
 
-        fix port checking on Win32 by performing it in another process
+    - fix port checking on Win32 by performing it in another process
         
-        On Win32 fork is emulating by creating another thread in the same process.
-        This leads to a possible bug/race condition when a server tries to open a
-        port and listen on it, while in the same process a client tries to connect
-        to the same port. This manifests by the accept call of the server failing
-        with an error of "Bad file descriptor".
-        
-        This is easily fixed by having another process perform the port checking,
-        since that will not interfere with the internals.
+    - On Win32 fork is emulating by creating another thread in the same process.
+      This leads to a possible bug/race condition when a server tries to open a
+      port and listen on it, while in the same process a client tries to connect
+      to the same port. This manifests by the accept call of the server failing
+      with an error of "Bad file descriptor".
 
-1.16
+      This is easily fixed by having another process perform the port checking,
+      since that will not interfere with the internals.
+
+1.16 2012-06-30
 
     [TEST FIX]
     - 1.15 breaks AIX fix on 1.14.
       t/05_sigint.t skips on perl <= 5.8.8.
 
-1.15
+1.15 2012-01-31
 
     [TEST FIX]
-    ${^CHILD_ERROR_NATIVE} is only available in perl 5.8.9 and later.
-    (kazeburo++)
+    - ${^CHILD_ERROR_NATIVE} is only available in perl 5.8.9 and later.
+      (kazeburo++)
 
-1.14
+1.14 2011-11-29
 
     - Fixed testing issue on AIX.
       https://rt.cpan.org/Public/Bug/Display.html?id=72779
@@ -131,161 +125,162 @@ Revision history for Perl extension Test::TCP
     - depend to Test::SharedFork 0.19 for better TB2 support
       (tokuhirom)
 
-1.13
+1.13 2011-05-31
 
     - RT#67292: Tests are blocking in Windows 7.
       https://rt.cpan.org/Ticket/Display.html?id=67292
     - change port number range from 10000 .. 11000 to 50000 .. 60000 to respect IANA.
       https://rt.cpan.org/Ticket/Display.html?id=64012
 
-1.12
+1.12 2011-03-03
 
     - workaround for win32 test fails.
       https://rt.cpan.org/Ticket/Display.html?id=66016
     - more diagnostic messages
 
-1.11
+1.11 2010-12-20
 
     - localize $@ in Test::TCP::DESTROY
 
-1.10
+1.10 2010-12-18
 
     - added Test::TCP->stop method
 
-1.09
+1.09 2010-12-18
 
     - added document in FAQ section
 
-1.08
+1.08 2010-12-16
 
     - no feature changes
 
-1.07_01
+1.07_01 2010-12-16
 
     - new OO interface!
 
-1.07
+1.07 2010-11-11
 
     - allow forking in the client(lestrrat)
 
-1.06
+1.06 2010-09-11
 
     - depend to Test::SharedFork 0.14. It fixes issue with Test::Builder2.
 
-1.05
+1.05 2010-09-10
 
     - workaround for $@ issue in test case.
       Data::Util's method modifier clears $@.
 
-1.04
+1.04 2010-08-24
 
     - fixed local $@ issue. this happens on some version of perl5.
 
-1.03
+1.03 2010-08-23
 
     - release to cpan
     - fixed win32 issue(charsbar)
 
-1.02_02
+1.02_02 2010-08-23
 
     - use randomness on finding empty port(suggested by kazuhooku)
     - try to connect the port before bind(Tatsuhiko Miyagawa)
 
-1.02_01
+1.02_01 2010-08-23
 
     - better cleanup code by RAII pattern.
       https://rt.cpan.org/Ticket/Display.html?id=60657
       (reported by dgl)
 
-1.02
+1.02 2010-08-17
 
     - lazy loading issue was fixed at Test::SharedFork 0.12.
       Depend to it.
       https://rt.cpan.org/Public/Bug/Display.html?id=60426
       (reported by J.)
 
-1.01
+1.01 2010-08-15
 
     - remove unused deps for use_test_base().
 
-1.00
+1.00 2010-08-08
 
     - bump up version!
 
-0.16_02
+0.16_02 2010-02-20
 
     - oops. packaging miss.
 
-0.16_01
+0.16_01 2010-02-20
 
     - Do not depend to IO::Socket::INET 1.31.
       Test::TCP works well with older IO, I hope.
       (suggested by mst)
 
-0.16
+0.16 2010-01-04
 
     - check port asap(suggested by Hideki YAMAMURA)
 
-0.15
+0.15 2009-11-28
 
     - fixed win32 issue(by charsbar++)
 
-0.14
+0.14 2009-10-18
 
     - support win32
 
-0.13
+0.13 2009-10-14
 
     - handle sigint(reported by kazuho++)
 
-0.12
+0.12 2009-10-04
 
     - fixed broken test on solaris
 
-0.11
+0.11 2009-09-17
 
     - fixed broken test, reported by drangon3++
 
-0.10
+0.10 2009-09-17
 
     - don't leak the process when get a SIGDIE
     - diag when get SIGPIPE
 
-0.09
+0.09 2009-09-15
 
     - don't leak the control by SIGTERM, some tcp server return the control by SIGTERM.
       (reported by kazuho++)
 
-0.08
+0.08 2009-09-14
 
     - oops. I forget to remove 'use Params::Validate' statement.
 
-0.07
+0.07 2009-09-13
 
     - diag when get a SIGABRT
 
-0.06
+0.06 2009-09-08
 
     - pass the pid to client(kazuho)
     - remove deps for Params::Validate(tokuhirom)
 
-0.05
+0.05 2009-06-22
 
     - updated docs
     - set ReuseAddr as true
 
-0.04
+0.04 2009-03-25
 
     - Test::SharedFork 0.03 has a bug. depend to 0.04
 
-0.03
+0.03 2009-03-25
 
     - do not depend to Sub::Exporter
     - use Test::SharedFork
 
-0.02
+0.02 2008-08-28
 
     - fixed deps for Sub::Exporter(by yappo++)
 
-0.01    Sun Aug 17 15:00:46 2008
-        - original version
+0.01 2008-08-17
+    - original version
+
