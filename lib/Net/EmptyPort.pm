@@ -95,6 +95,7 @@ sub wait_port {
         $proto = $proto ? lc($proto) : 'tcp';
     }
 
+    $max_wait = 10 unless defined $max_wait;
     my $waiter = _make_waiter($max_wait);
 
     while ( $waiter->() ) {
@@ -174,7 +175,8 @@ This method waits the C<< $port >> number is ready to accept a request.
 
 C<$port> is a port number to check.
 
-Sleep up to C<$max_wait> seconds for checking the port.
+Sleep up to C<$max_wait> seconds (10 seconds by default) for checking the
+port.
 
 I<Return value> : Return true if the port is available, false otherwise.
 
