@@ -88,7 +88,7 @@ sub wait_port {
     if (@_==4) {
         # backward compat.
         ($port, (my $sleep), (my $retry), $proto) = @_;
-        $max_wait = $max_wait*$retry;
+        $max_wait = $sleep * $retry;
         $proto = $proto ? lc($proto) : 'tcp';
     } else {
         ($port, $max_wait, $proto) = @_;
