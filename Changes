@@ -2,6 +2,10 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.03_02 2014-06-23T23:37:07Z
+
+    - Release to CPAN.
+
 2.03_01 2014-06-23T23:34:38Z
 
     - Switch to ExtUtils::MakeMaker.
