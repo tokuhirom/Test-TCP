@@ -68,8 +68,6 @@ Test::TCP is test utilities for TCP/IP programs.
             max_wait => 3, # seconds
         );
 
-
-
 - wait\_port
 
         wait_port(8080);
@@ -100,7 +98,7 @@ Test::TCP is test utilities for TCP/IP programs.
 
         Will wait for at most `$max_wait` seconds before checking port.
 
-        See also [Net::EmptyPort](http://search.cpan.org/perldoc?Net::EmptyPort).
+        See also [Net::EmptyPort](https://metacpan.org/pod/Net::EmptyPort).
 
         _Default: 10_
 
