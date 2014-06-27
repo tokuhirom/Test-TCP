@@ -63,7 +63,7 @@ my $client = sub {
 {
     my $tcp = Test::TCP->new(
         code => $server,
-        max_wait => 3,
+        max_wait => -3,
     );
     $client->($tcp->port);
     if ($?) {
@@ -73,7 +73,7 @@ my $client = sub {
         $? = 0;
     }
 
-    is($max_wait, 3);
+    is($max_wait, -3);
 }
 
 # test_tcp() arguments are passed to Net::EmptyPort::wait_port.
@@ -81,9 +81,9 @@ my $client = sub {
     test_tcp(
         client => $client,
         server => $server,
-        max_wait => 2,
+        max_wait => -2,
     );
-    is($max_wait, 2);
+    is($max_wait, -2);
 }
 
 done_testing;

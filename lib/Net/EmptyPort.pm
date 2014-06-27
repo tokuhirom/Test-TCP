@@ -73,7 +73,7 @@ sub _make_waiter {
     my $sleep  = 0.001;
 
     return sub {
-        return 0 if $waited > $max_wait;
+        return 0 if $max_wait >= 0 && $waited > $max_wait;
 
         Time::HiRes::sleep($sleep);
         $waited += $sleep;
@@ -176,7 +176,7 @@ This method waits the C<< $port >> number is ready to accept a request.
 C<$port> is a port number to check.
 
 Sleep up to C<$max_wait> seconds (10 seconds by default) for checking the
-port.
+port. Pass negative C<$max_wait> value to wait infinitely.
 
 I<Return value> : Return true if the port is available, false otherwise.
 
