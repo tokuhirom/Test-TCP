@@ -2,6 +2,25 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.06 2014-07-01T10:01:44Z
+
+    commit 8259d5eb28919bc766c8b500151d5be7e944b7f2
+    Author: Petr Písař <ppisar@redhat.com>
+    Date:   Fri Jun 27 13:37:20 2014 +0200
+
+        Wait infinitely if max_wait is negative
+
+        The t/12_pass_wait_port_options.t will fail if the server process does not
+        start listening in max_wait limit. This can happen if the host is
+        loaded or just if the scheduler decides to postpone the process.
+
+        This patch adds possibility to wait infitely by passing a negative
+        max_wait value to the Test::TCP object and it changes the
+        t/12_pass_wait_port_options.t test to use this feature.
+
+        https://github.com/tokuhirom/Test-TCP/issues/28
+        Signed-off-by: Petr Písař <ppisar@redhat.com>
+
 2.05 2014-06-24T00:49:45Z
 
     - Release again with latest minil.
