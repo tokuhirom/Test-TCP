@@ -1,10 +1,17 @@
 use strict;
 use warnings;
 use utf8;
+use Config;
 use Test::More;
 use Test::TCP;
 use IO::Socket::INET;
 use t::Server;
+
+plan skip_all => "fork not supported on this platform"
+  unless $Config::Config{d_fork} || $Config::Config{d_pseudofork} ||
+    (($^O eq 'MSWin32' || $^O eq 'NetWare') and
+     $Config::Config{useithreads} and
+     $Config::Config{ccflags} =~ /-DPERL_IMPLICIT_SYS/);
 
 my ($port, $max_wait);
 my $old = \&Net::EmptyPort::wait_port;
