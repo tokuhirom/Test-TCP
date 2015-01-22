@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.1.0, CPAN::Meta::Converter version 2.141520",
+   "generated_by" : "Minilla/v2.2.0, CPAN::Meta::Converter version 2.141520",
    "license" : [
       "perl_5"
    ],
@@ -47,7 +47,7 @@
          "requires" : {
             "IO::Socket::INET" : "0",
             "Test::More" : "0",
-            "Test::SharedFork" : "0.19",
+            "Test::SharedFork" : "0.29",
             "Time::HiRes" : "0",
             "perl" : "5.008001"
          }
@@ -72,7 +72,7 @@
          "web" : "https://github.com/tokuhirom/Test-TCP"
       }
    },
-   "version" : "2.06",
+   "version" : "2.07",
    "x_contributors" : [
       "tokuhirom <tokuhirom@d0d07461-0603-4401-acd4-de1884942a52>",
       "mattn <mattn@d0d07461-0603-4401-acd4-de1884942a52>",

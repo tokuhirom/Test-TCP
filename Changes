@@ -2,6 +2,13 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.07 2015-01-22T10:44:21Z
+
+    Old versions of Test::SharedFork are incompatibles with the new Test::Builder: I had "missing TB2::History" errors.
+    It would be helpful to upgrade the Test::SharedFork dependency to help the user to avoid to encounter such hard to track deep errors.
+    (Reported by dolmen++)
+
+
 2.06 2014-07-01T10:01:44Z
 
     commit 8259d5eb28919bc766c8b500151d5be7e944b7f2
