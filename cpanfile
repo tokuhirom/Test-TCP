@@ -1,6 +1,6 @@
 requires 'perl', 5.008_001;
 requires 'IO::Socket::INET';
-requires 'Test::SharedFork', '0.19';
+requires 'Test::SharedFork', '0.29';
 requires 'Test::More';
 requires 'Time::HiRes';
 
