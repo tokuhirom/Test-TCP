@@ -6,20 +6,32 @@ use IO::Socket::INET;
 use Time::HiRes ();
 
 our @EXPORT = qw/ empty_port check_port wait_port /;
+our @EXPORT_OK = qw/ empty_port_multi /;
 
 # get a empty port on 49152 .. 65535
 # http://www.iana.org/assignments/port-numbers
 sub empty_port {
+    my ($port) = empty_port_multi(count=>1,start=>$_[0],proto=>$_[1]);
+    die "empty port not found" unless $port;
+    return $port;
+}
+sub empty_port_multi {
+    my (%opts) = @_;
+
     my $port = do {
-        if (defined $_[0]) {
-            my $p = $_[0];
+        if (defined $opts{start}) {
+            my $p = $opts{start};
             $p = 49152 unless $p =~ /^[0-9]+$/ && $p < 49152;
             $p;
         } else {
             50000 + (int(rand()*1500) + abs($$)) % 1500;
         }
     };
-    my $proto = $_[1] ? lc($_[1]) : 'tcp';
+    my $proto = $opts{proto}? lc($opts{proto}) : 'tcp';
+    my $count = $opts{count};
+    $count=1 if $count<1;
+
+    my @found_ports=();
 
     while ( $port++ < 65000 ) {
         # Remote checks don't work on UDP, and Local checks would be redundant here...
@@ -32,9 +44,12 @@ sub empty_port {
             Proto     => $proto,
             (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
         );
-        return $port if $sock;
+        push @found_ports,$port if $sock;
+
+        return @found_ports if @found_ports == $count;
     }
-    die "empty port not found";
+
+    return @found_ports;
 }
 
 sub check_port {
@@ -156,6 +171,39 @@ the second parameter:
     my $port = empty_port(1024, 'udp');
     # use 49152..65535 range
     my $port = empty_port(undef, 'udp');
+
+If C<empty_port> can not find a port to return, it will C<die>.
+
+=item C<< empty_port_multi(...) >>
+
+    my @ports = empty_port_multi(count=>5);
+
+Sometimes you need a set of open ports. Calling C<empty_port> multiple
+times without creating a listening socket after each call does not
+guarantee you'll get different ports each time. C<empty_port_multi>
+guarantees that.
+
+In addition to passing the number of ports you want, you can pass the
+port number to start from, and the protocol:
+
+    my @ports = empty_port_multi(count=>5,start=>5963,proto=>'udp');
+
+All parameters are optional, with the same defaults as C<empty_port>;
+C<count> defaults to 1.
+
+If C<empty_port_multi> can not find enough empty ports, it will return
+the ones it found (possibly none).
+
+C<empty_port_multi> is not exported by default, you have to ask for
+it:
+
+   use Net::EmptyPort 'empty_port_multi';
+   # or
+   use Net::EmptyPort qw(:DEFAULT empty_port_multi);
+   # or
+   use Net::EmptyPort qw(:ALL);
+
+(see L<Exporter> for details).
 
 =item C<< check_port($port:Int) >>
 
