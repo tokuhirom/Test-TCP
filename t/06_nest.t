@@ -1,8 +1,17 @@
 use strict;
 use warnings;
+use Config;
 use Test::TCP;
-use Test::More tests => 1;
+use Test::More;
 use t::Server;
+
+plan skip_all => "fork not supported on this platform"
+  unless $Config::Config{d_fork} || $Config::Config{d_pseudofork} ||
+    (($^O eq 'MSWin32' || $^O eq 'NetWare') and
+     $Config::Config{useithreads} and
+     $Config::Config{ccflags} =~ /-DPERL_IMPLICIT_SYS/);
+
+plan tests => 1;
 
 test_tcp(
     client => sub {
