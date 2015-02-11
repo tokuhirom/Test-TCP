@@ -2,16 +2,26 @@ use warnings;
 use strict;
 use Test::More tests => 22;
 use Test::TCP;
-use IO::Socket::INET;
 use t::Server;
+
+our $io_socket_module_name;
+BEGIN {
+  if (eval { require IO::Socket::IP }) {
+    $io_socket_module_name = 'IO::Socket::IP';
+  } elsif (eval { require IO::Socket::INET6 }) {
+    $io_socket_module_name = 'IO::Socket::INET6';
+  } elsif (eval { require IO::Socket::INET }) {
+    $io_socket_module_name = 'IO::Socket::INET';
+  }
+}
 
 test_tcp(
     client => sub {
         my $port = shift;
         ok $port, "test case for sharedfork" for 1..10;
-        my $sock = IO::Socket::INET->new(
+        my $sock = $io_socket_module_name->new(
             PeerPort => $port,
-            PeerAddr => '127.0.0.1',
+            PeerAddr => 'localhost',
             Proto    => 'tcp'
         ) or die "Cannot open client socket: $!";
 

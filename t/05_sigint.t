@@ -1,10 +1,20 @@
 use strict;
 use warnings;
 use Test::TCP;
-use IO::Socket::INET;
 use POSIX;
 use Test::More;
 use Config;
+
+our $io_socket_module_name;
+BEGIN {
+  if (eval { require IO::Socket::IP }) {
+    $io_socket_module_name = 'IO::Socket::IP';
+  } elsif (eval { require IO::Socket::INET6 }) {
+    $io_socket_module_name = 'IO::Socket::INET6';
+  } elsif (eval { require IO::Socket::INET }) {
+    $io_socket_module_name = 'IO::Socket::INET';
+  }
+}
 
 plan skip_all => "this test requires SIGUSR1" unless $Config{sig_name} =~ /USR1/;
 plan skip_all => "Perl<5.8.8 does not supports \${^CHILD_ERROR_NATIVE}" if $] <= 5.008008;
@@ -35,8 +45,8 @@ if ($pid > 0) {
         },
         server => sub {
             my $port = shift;
-            my $sock = IO::Socket::INET->new(
-                LocalAddr => '127.0.0.1',
+            my $sock = $io_socket_module_name->new(
+                LocalAddr => 'localhost',
                 LocalPort => $port,
                 Listen    => 5,
                 ReuseAddr => 1,

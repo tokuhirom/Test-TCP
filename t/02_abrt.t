@@ -3,8 +3,18 @@ use warnings;
 use Test::TCP;
 use Test::More;
 use Socket;
-use IO::Socket::INET;
 use t::Server;
+
+our $io_socket_module_name;
+BEGIN {
+  if (eval { require IO::Socket::IP }) {
+    $io_socket_module_name = 'IO::Socket::IP';
+  } elsif (eval { require IO::Socket::INET6 }) {
+    $io_socket_module_name = 'IO::Socket::INET6';
+  } elsif (eval { require IO::Socket::INET }) {
+    $io_socket_module_name = 'IO::Socket::INET';
+  }
+}
 
 plan skip_all => "win32 doesn't support embedded function named dump()" if $^O eq 'MSWin32';
 plan tests => 2;
@@ -12,9 +22,9 @@ plan tests => 2;
 test_tcp(
     client => sub {
         my $port = shift;
-        my $sock = IO::Socket::INET->new(
+        my $sock = $io_socket_module_name->new(
             PeerPort => $port,
-            PeerAddr => '127.0.0.1',
+            PeerAddr => 'localhost',
             Proto    => 'tcp'
         ) or die "Cannot open client socket: $!";
         print {$sock} "dump\n";

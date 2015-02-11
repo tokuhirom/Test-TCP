@@ -160,7 +160,7 @@ Test::TCP - testing TCP program
             ...
         },
     );
-    my $client = MyClient->new(host => '127.0.0.1', port => $server->port);
+    my $client = MyClient->new(host => 'localhost', port => $server->port);
     undef $server; # kill child process on DESTROY
 
 Using memcached:
@@ -175,7 +175,7 @@ Using memcached:
             die "cannot execute $bin: $!";
         },
     );
-    my $memd = Cache::Memcached->new({servers => ['127.0.0.1:' . $memcached->port]});
+    my $memd = Cache::Memcached->new({servers => ['localhost:' . $memcached->port]});
     ...
 
 And functional interface is available:
@@ -345,7 +345,7 @@ You can use C<exec()> in child process.
     );
 
     use Cache::Memcached;
-    my $memd = Cache::Memcached->new({servers => ['127.0.0.1:' . $memcached->port]});
+    my $memd = Cache::Memcached->new({servers => ['localhost:' . $memcached->port]});
     $memd->set(foo => 'bar');
     is $memd->get('foo'), 'bar';
 
