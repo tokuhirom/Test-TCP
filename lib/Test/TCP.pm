@@ -24,13 +24,10 @@ sub test_tcp {
         die "missing madatory parameter $k" unless exists $args{$k};
     }
     my $server_code = delete $args{server};
-    my $port = delete($args{port}) || empty_port();
-
     my $client_code = delete $args{client};
 
     my $server = Test::TCP->new(
         code => $server_code,
-        port => $port,
         %args,
     );
     $client_code->($server->port, $server->pid);
@@ -65,7 +62,7 @@ sub new {
         _my_pid    => $$,
         %args,
     }, $class;
-    $self->{port} = empty_port() unless exists $self->{port};
+    $self->{port} ||= empty_port();
     $self->start()
       if $self->{auto_start};
     return $self;
