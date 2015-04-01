@@ -24,13 +24,10 @@ sub test_tcp {
         die "missing madatory parameter $k" unless exists $args{$k};
     }
     my $server_code = delete $args{server};
-    my $port = delete($args{port}) || empty_port();
-
     my $client_code = delete $args{client};
 
     my $server = Test::TCP->new(
         code => $server_code,
-        port => $port,
         %args,
     );
     $client_code->($server->port, $server->pid);
@@ -38,18 +35,24 @@ sub test_tcp {
 }
 
 sub wait_port {
-    my ($port, $max_wait);
-    if (@_==3) {
+    my ($host, $port, $max_wait);
+    if (@_ && ref $_[0] eq 'HASH') {
+        $host = $_[0]->{host};
+        $port = $_[0]->{port};
+        $max_wait = $_[0]->{max_wait};
+    } elsif (@_ == 3) {
         # backward compat
         ($port, (my $sleep), (my $retry)) = @_;
         $max_wait = $sleep * $retry;
-    }  else {
+    } else {
         ($port, $max_wait) = @_;
     }
+    $host = '127.0.0.1'
+        unless defined $host;
     $max_wait ||= 10;
 
-    Net::EmptyPort::wait_port($port, $max_wait)
-        or die "cannot open port: $port";
+    Net::EmptyPort::wait_port({ host => $host, port => $port, max_wait => $max_wait })
+        or die "cannot open port: $host:$port";
 }
 
 # ------------------------------------------------------------------------- 
@@ -62,10 +65,11 @@ sub new {
     my $self = bless {
         auto_start => 1,
         max_wait   => 10,
+        host       => '127.0.0.1',
         _my_pid    => $$,
         %args,
     }, $class;
-    $self->{port} = empty_port() unless exists $self->{port};
+    $self->{port} ||= empty_port({ host => $self->{host} });
     $self->start()
       if $self->{auto_start};
     return $self;
@@ -81,7 +85,7 @@ sub start {
 
     if ( $pid ) { # parent process.
         $self->{pid} = $pid;
-        Test::TCP::wait_port($self->port, $self->{max_wait});
+        Test::TCP::wait_port({ host => $self->{host}, port => $self->port, max_wait => $self->{max_wait} });
         return;
     } else { # child process
         $self->{code}->($self->port);

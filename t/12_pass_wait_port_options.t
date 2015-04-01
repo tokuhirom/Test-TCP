@@ -6,14 +6,14 @@ use Test::TCP;
 use IO::Socket::INET;
 use t::Server;
 
-my ($port, $max_wait);
+my %wait_port_args;
 my $old = \&Net::EmptyPort::wait_port;
 my $return = sub { 1 };
 
 {
     no warnings 'redefine';
     *Net::EmptyPort::wait_port = sub {
-        ($port, $max_wait) = @_;
+        %wait_port_args = %{$_[0]};
         $return->(@_);
     };
 }
@@ -21,7 +21,7 @@ my $return = sub { 1 };
 # Test::TCP::wait_port arguments are passed to Net::EmptyPort::wait_port.
 {
     Test::TCP::wait_port(1, 1);
-    is($max_wait, 1);
+    is($wait_port_args{max_wait}, 1);
 }
 
 $return = sub { $old->(@_) };
@@ -29,7 +29,7 @@ $return = sub { $old->(@_) };
 my $server = sub {
     my $port = shift;
     ok $port, "test case for sharedfork" for 1 .. 10;
-    t::Server->new($port)->run(sub {
+    t::Server->new('127.0.0.1', $port)->run(sub {
             note "new request";
             my ($remote, $line, $sock) = @_;
             print {$remote} $line;
@@ -73,7 +73,7 @@ my $client = sub {
         $? = 0;
     }
 
-    is($max_wait, -3);
+    is($wait_port_args{max_wait}, -3);
 }
 
 # test_tcp() arguments are passed to Net::EmptyPort::wait_port.
@@ -83,7 +83,7 @@ my $client = sub {
         server => $server,
         max_wait => -2,
     );
-    is($max_wait, -2);
+    is($wait_port_args{max_wait}, -2);
 }
 
 done_testing;
