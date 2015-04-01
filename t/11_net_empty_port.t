@@ -5,7 +5,11 @@ use Test::More;
 use Net::EmptyPort;
 
 sub doit {
-    my ($host, $port) = @_;
+    my $host = shift;
+
+    my $port = empty_port();
+    ok "found an empty port";
+
     ok !wait_port({ host => $host, port => $port, max_wait => 0.1 }), "port is closed";
 
     my $sock = IO::Socket::IP->new(
@@ -18,24 +22,18 @@ sub doit {
     ok wait_port({ host => $host, port => $port, max_wait => 3 }), "port is open";
 };
 
+ok can_bind('127.0.0.1'), 'bind to 127.0.0.1';
+ok ! can_bind('8.8.8.8'), 'bind to an anvailable address';
+
 subtest 'v4' => sub {
-    my $port = empty_port();
-    ok "found an empty port";
-    doit('127.0.0.1', $port);
+    doit('127.0.0.1');
 };
 
 subtest 'v6' => sub {
-    my $port = do {
-        local $@;
-        my $p = eval {
-            empty_port({ host => '::1' });
-        };
-        plan skip_all => "IPv6 not supported"
-            if $@;
-        $p;
-    };
+    plan skip_all => "IPv6 not supported"
+        unless can_bind('::1');
     ok "found an empty port";
-    doit('::1', $port);
+    doit('::1');
 };
 
 done_testing;
