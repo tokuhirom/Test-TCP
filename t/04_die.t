@@ -16,7 +16,7 @@ eval {
         },
         server => sub {
             my $port = shift;
-            t::Server->new('127.0.0.1', $port)->run(sub { });
+            t::Server->new($port)->run(sub { });
         },
     );
 };

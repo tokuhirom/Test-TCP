@@ -14,13 +14,13 @@ test_tcp(
             },
             server => sub {
                 my $port2 = shift;
-                t::Server->new('127.0.0.1', $port2)->run;
+                t::Server->new($port2)->run;
             },
         );
     },
     server => sub {
         my $port1 = shift;
-        t::Server->new('127.0.0.1', $port1)->run;
+        t::Server->new($port1)->run;
     },
 );
 

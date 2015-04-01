@@ -2,28 +2,27 @@ package t::Server;
 use strict;
 use warnings;
 use base qw/Exporter/;
-use IO::Socket::IP;
+use IO::Socket::INET;
 
 our @EXPORT = qw/new_sock/;
 
 sub new_sock {
-    my ($host, $port) = @_;
-    my $sock = IO::Socket::IP->new(
+    my $port = shift;
+    my $sock = IO::Socket::INET->new(
         LocalPort => $port,
-        LocalAddr => $host,
+        LocalAddr => '127.0.0.1',
         Proto     => 'tcp',
         Listen    => 5,
         Type      => SOCK_STREAM,
-        V6Only    => 1,
         (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
     ) or die "Cannot open server socket: $!";
     return $sock;
 }
 
 sub new {
-    my ($class, $host, $port) = @_;
+    my ($class, $port) = @_;
 
-    my $sock = new_sock($host, $port);
+    my $sock = new_sock($port);
     bless { sock => $sock }, $class;
 }
 

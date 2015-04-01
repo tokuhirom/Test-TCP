@@ -2,7 +2,7 @@ package Net::EmptyPort;
 use strict;
 use warnings;
 use base qw/Exporter/;
-use IO::Socket::IP;
+use IO::Socket::INET;
 use Time::HiRes ();
 
 our @EXPORT = qw/ empty_port check_port wait_port /;
@@ -10,26 +10,26 @@ our @EXPORT = qw/ empty_port check_port wait_port /;
 # get a empty port on 49152 .. 65535
 # http://www.iana.org/assignments/port-numbers
 sub empty_port {
-    my ($host, $port, $proto) = @_ && ref $_[0] eq 'HASH' ? ($_[0]->{host}, $_[0]->{port}, $_[0]->{proto}) : (undef, @_);
-    $host = '127.0.0.1'
-        unless defined $host;
-    if (defined $port) {
-        $port = 49152 unless $port =~ /^[0-9]+$/ && $port < 49152;
-    } else {
-        $port = 50000 + (int(rand()*1500) + abs($$)) % 1500;
-    }
-    $proto = $proto ? lc($proto) : 'tcp';
+    my $port = do {
+        if (defined $_[0]) {
+            my $p = $_[0];
+            $p = 49152 unless $p =~ /^[0-9]+$/ && $p < 49152;
+            $p;
+        } else {
+            50000 + (int(rand()*1500) + abs($$)) % 1500;
+        }
+    };
+    my $proto = $_[1] ? lc($_[1]) : 'tcp';
 
     while ( $port++ < 65000 ) {
         # Remote checks don't work on UDP, and Local checks would be redundant here...
-        next if ($proto eq 'tcp' && check_port({ host => $host, port => $port }));
+        next if ($proto eq 'tcp' && check_port($port));
 
-        my $sock = IO::Socket::IP->new(
+        my $sock = IO::Socket::INET->new(
             (($proto eq 'udp') ? () : (Listen => 5)),
-            LocalAddr => $host,
+            LocalAddr => '127.0.0.1',
             LocalPort => $port,
             Proto     => $proto,
-            V6Only    => 1,
             (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
         );
         return $port if $sock;
@@ -38,25 +38,21 @@ sub empty_port {
 }
 
 sub check_port {
-    my ($host, $port, $proto) = @_ && ref $_[0] eq 'HASH' ? ($_[0]->{host}, $_[0]->{port}, $_[0]->{proto}) : (undef, @_);
-    $host = '127.0.0.1'
-        unless defined $host;
-    $proto = $proto ? lc($proto) : 'tcp';
+    my $port = $_[0];
+    my $proto = $_[1] ? lc($_[1]) : 'tcp';
 
     # for TCP, we do a remote port check
     # for UDP, we do a local port check, like empty_port does
     my $sock = ($proto eq 'tcp') ?
-        IO::Socket::IP->new(
+        IO::Socket::INET->new(
             Proto    => 'tcp',
-            PeerAddr => $host,
+            PeerAddr => '127.0.0.1',
             PeerPort => $port,
-            V6Only   => 1,
         ) :
-        IO::Socket::IP->new(
+        IO::Socket::INET->new(
             Proto     => $proto,
-            LocalAddr => $host,
+            LocalAddr => '127.0.0.1',
             LocalPort => $port,
-            V6Only   => 1,
             (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
         )
     ;
@@ -88,23 +84,22 @@ sub _make_waiter {
 }
 
 sub wait_port {
-    my ($host, $port, $max_wait, $proto);
-    if (@_ && ref $_[0] eq 'HASH') {
-        ($host, $port, $max_wait, $proto) = ($_[0]->{host}, $_[0]->{port}, $_[0]->{max_wait}, $_[0]->{proto});
-    } elsif (@_==4) {
+    my ($port, $max_wait, $proto);
+    if (@_==4) {
         # backward compat.
         ($port, (my $sleep), (my $retry), $proto) = @_;
         $max_wait = $sleep * $retry;
+        $proto = $proto ? lc($proto) : 'tcp';
     } else {
         ($port, $max_wait, $proto) = @_;
+        $proto = $proto ? lc($proto) : 'tcp';
     }
-    $host = '127.0.0.1' unless defined $host;
-    $max_wait ||= 10;
-    $proto = $proto ? lc($proto) : 'tcp';
+
+    $max_wait = 10 unless defined $max_wait;
     my $waiter = _make_waiter($max_wait);
 
     while ( $waiter->() ) {
-        if ($^O eq 'MSWin32' ? `$^X -MTest::TCP::CheckPort -echeck_port $port $proto` : check_port({ host => $host, port => $port, proto => $proto })) {
+        if ($^O eq 'MSWin32' ? `$^X -MTest::TCP::CheckPort -echeck_port $port $proto` : check_port( $port, $proto )) {
             return 1;
         }
     }

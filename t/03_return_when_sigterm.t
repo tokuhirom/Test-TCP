@@ -14,7 +14,7 @@ test_tcp(
     },
     server => sub {
         my $port = shift;
-        my $sock = new_sock('127.0.0.1', $port);
+        my $sock = new_sock($port);
         my $term_received = 0;
         $SIG{TERM} = sub { $term_received++ };
         while ($term_received == 0) {
