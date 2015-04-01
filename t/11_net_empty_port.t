@@ -28,7 +28,7 @@ subtest 'v6' => sub {
     my $port = do {
         local $@;
         my $p = eval {
-            empty_port();
+            empty_port({ host => '::1' });
         };
         plan skip_all => "IPv6 not supported"
             if $@;

@@ -99,7 +99,7 @@ sub wait_port {
         ($port, $max_wait, $proto) = @_;
     }
     $host = '127.0.0.1' unless defined $host;
-    $max_wait = 10 unless defined $max_wait;
+    $max_wait ||= 10;
     $proto = $proto ? lc($proto) : 'tcp';
     my $waiter = _make_waiter($max_wait);
 
