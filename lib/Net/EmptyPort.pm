@@ -5,7 +5,21 @@ use base qw/Exporter/;
 use IO::Socket::IP;
 use Time::HiRes ();
 
-our @EXPORT = qw/ empty_port check_port wait_port /;
+our @EXPORT = qw/ can_bind empty_port check_port wait_port /;
+
+sub can_bind {
+    my ($host, $port, $proto) = @_;
+    $port ||= 0;
+    $proto ||= 'tcp';
+    !! IO::Socket::IP->new(
+        (($proto eq 'udp') ? () : (Listen => 5)),
+        LocalAddr => $host,
+        LocalPort => $port,
+        Proto     => $proto,
+        V6Only    => 1,
+        (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
+    );
+}
 
 # get a empty port on 49152 .. 65535
 # http://www.iana.org/assignments/port-numbers
@@ -23,16 +37,7 @@ sub empty_port {
     while ( $port++ < 65000 ) {
         # Remote checks don't work on UDP, and Local checks would be redundant here...
         next if ($proto eq 'tcp' && check_port({ host => $host, port => $port }));
-
-        my $sock = IO::Socket::IP->new(
-            (($proto eq 'udp') ? () : (Listen => 5)),
-            LocalAddr => $host,
-            LocalPort => $port,
-            Proto     => $proto,
-            V6Only    => 1,
-            (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
-        );
-        return $port if $sock;
+        return $port if can_bind($host, $port, $proto);
     }
     die "empty port not found";
 }
