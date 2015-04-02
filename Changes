@@ -2,6 +2,9 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.09 2015-04-02T21:55:18Z
+    - fix tests running for a long time on systems that do not support IPv6 #35
+
 2.08 2015-04-02T04:04:33Z
     - add `host` argument to various functions for binding to arbitrary address (incl. IPv6) #33
     - add function `Net::EmptyPort::can_bind` #34
