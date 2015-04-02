@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.2.0, CPAN::Meta::Converter version 2.141520",
+   "generated_by" : "Minilla/v2.3.0, CPAN::Meta::Converter version 2.150001",
    "license" : [
       "perl_5"
    ],
@@ -55,6 +55,7 @@
       "test" : {
          "requires" : {
             "File::Temp" : "0",
+            "IO::Socket::IP" : "0",
             "Socket" : "0",
             "Test::More" : "0.98"
          }
@@ -72,7 +73,7 @@
          "web" : "https://github.com/tokuhirom/Test-TCP"
       }
    },
-   "version" : "2.07",
+   "version" : "2.08",
    "x_contributors" : [
       "tokuhirom <tokuhirom@d0d07461-0603-4401-acd4-de1884942a52>",
       "mattn <mattn@d0d07461-0603-4401-acd4-de1884942a52>",
@@ -89,6 +90,7 @@
       "Ivan Baidakou <dmol@gmx.com>",
       "Neil Bowers <neil@bowers.com>",
       "Pavel Shaydo <zwon@cpan.org>",
-      "Petr Písař <ppisar@redhat.com>"
+      "Petr Písař <ppisar@redhat.com>",
+      "Kazuho Oku <kazuhooku@gmail.com>"
    ]
 }

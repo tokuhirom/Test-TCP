@@ -64,6 +64,7 @@ Test::TCP is test utilities for TCP/IP programs.
                 # run server
             },
             # optional
+            host => '127.0.0.1', # specify '::1' to test using IPv6
             port => 8080,
             max_wait => 3, # seconds
         );
@@ -187,6 +188,40 @@ Test::TCP is test utilities for TCP/IP programs.
         is $memd->get('foo'), 'bar';
 
         done_testing;
+
+- How do I use address other than "127.0.0.1" for testing?
+
+    You can use the `host` paramater to specify the bind address.
+
+        # let the server bind to "0.0.0.0" for testing
+        test_tcp(
+            client => sub {
+                ...
+            },
+            server => sub {
+                ...
+            },
+            host => '0.0.0.0',
+        );
+
+- How should I write IPv6 tests?
+
+    You should use the \`Net::EmptyPort::can\_bind\` function to check if the program can bind to the loopback address of IPv6, as well as the \`host\` parameter of the \`test\_tcp\` function to specify the same address as the bind address.
+
+        use Net::EmptyPort qw(can_bind);
+
+        plan skip_all => "IPv6 not available"
+            unless can_bind('::1');
+
+        test_tcp(
+            client => sub {
+                ...
+            },
+            server => sub {
+                ...
+            },
+            host => '::1',
+        );
 
 # AUTHOR
 

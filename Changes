@@ -2,6 +2,10 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.08 2015-04-02T04:04:33Z
+    - add `host` argument to various functions for binding to arbitrary address (incl. IPv6) #33
+    - add function `Net::EmptyPort::can_bind` #34
+
 2.07 2015-01-22T10:44:21Z
 
     Old versions of Test::SharedFork are incompatibles with the new Test::Builder: I had "missing TB2::History" errors.
