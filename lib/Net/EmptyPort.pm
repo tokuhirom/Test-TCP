@@ -148,49 +148,116 @@ Net::EmptyPort helps finding an empty TCP/UDP port.
 
 =item C<< empty_port() >>
 
+=item C<< empty_port(\%args) >>
+
+=item C<< empty_port($port) >>
+
+=item C<< empty_port($port, $proto) >>
+
     my $port = empty_port();
 
-Get the available port number, you can use.
+Returns a port number that is NOT in use.
 
-Normally, empty_port() finds empty port number from 49152..65535.
+The function recognizes the following keys when given a hashref as the argument.
+
+=over 4
+
+=item C<< host >>
+
+specifies the address on which the search should be performed.  Default is C<< 127.0.0.1 >>.
+
+=item C<< port >>
+
+Lower bound of the search for an empty port.  If omitted, the function searches for an empty port within 49152..65535.
+
 See L<http://www.iana.org/assignments/port-numbers>
 
-But you want to use another range, use a following form:
+=item C<< proto >>
 
-    # 5963..65535
-    my $port = empty_port(5963);
+Name of the protocol.  Default is C<< tcp >>. You can find an empty UDP port by specifying C<< udp >>.
 
-You can also find an empty UDP port by specifying the protocol as
+=back
+
+To maintain backwards compatibility, the function accepts scalar arguments as well.  For example, you can also find an empty UDP port by specifying the protocol as
 the second parameter:
 
     my $port = empty_port(1024, 'udp');
     # use 49152..65535 range
     my $port = empty_port(undef, 'udp');
 
-=item C<< check_port($port:Int) >>
+=item C<< check_port(\%args) >>
+
+=item C<< check_port($port) >>
+
+=item C<< check_port($port, $proto) >>
 
     my $true_or_false = check_port(5000);
 
 Checks if the given port is already in use. Returns true if it is in use (i.e. if the port is NOT free). Returns false if the port is free.
 
-Also works for UDP:
+The function recognizes the following keys when given a hashref as the argument.
 
-    my $true_or_false = check_port(5000, 'udp');
+=over 4
 
-=item C<< wait_port($port:Int[, $max_wait:Number,$proto:String]) >>
+=item C<< host >>
 
-Waits for a particular port is available for connect.
+specifies the address on which the search should be performed.  Default is C<< 127.0.0.1 >>.
 
-This method waits the C<< $port >> number is ready to accept a request.
+=item C<< port >>
 
-C<$port> is a port number to check.
+specifies the port to check.  This argument is mandatory.
 
-Sleep up to C<$max_wait> seconds (10 seconds by default) for checking the
-port. Pass negative C<$max_wait> value to wait infinitely.
+=item C<< proto >>
 
-I<Return value> : Return true if the port is available, false otherwise.
+name of the protocol.  Default is C<< tcp >>.
+
+=back
+
+To maintain backwards compatibility, the function accepts scalar arguments as well in the form described above.
+
+=item C<< wait_port(\%args) >>
+
+=item C<< wait_port($port) >>
+
+=item C<< wait_port($port, $max_wait) >>
+
+=item C<< wait_port($port, $max_wait, $proto) >>
+
+Waits until a particular port becomes ready to connect to.  Returns true if the port becomes ready, or false if otherwise.
+
+The function recognizes the following keys when given a hashref as the argument.
+
+=over 4
+
+=item C<< host >>
+
+specifies the address on which the search should be performed.  Default is C<< 127.0.0.1 >>.
+
+=item C<< port >>
+
+specifies the port to check.  This argument is mandatory.
+
+=item C<< max_wait >>
+
+maximum seconds to wait for (default is 10 seconds).  Pass a negative value to wait infinitely.
+
+=item C<< proto >>
+
+name of the protocol.  Default is C<< tcp >>.
+
+=back
+
+To maintain backwards compatibility, the function accepts scalar arguments as well in the form described above.
 
 B<Incompatible changes>: Before 2.0, C<< wait_port($port:Int[, $sleep:Number, $retry:Int, $proto:String]) >> is a signature.
+
+=item C<< can_bind($host) >>
+
+=item C<< can_bind($host, $port) >>
+
+=item C<< can_bind($host, $port, $proto) >>
+
+Checks if the application is capable of binding to given port.
 
 =back
 
