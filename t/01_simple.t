@@ -2,11 +2,13 @@ use warnings;
 use strict;
 use Test::More;
 use Test::TCP;
+use Net::EmptyPort qw(can_bind);
 use IO::Socket::IP;
 use t::Server;
 
 sub doit {
     my $host = shift;
+    ok 1, "starting the test";
     test_tcp(
         client => sub {
             my $port = shift;
@@ -48,14 +50,8 @@ subtest 'v4' => sub {
     doit('127.0.0.1');
 };
 subtest 'v6' => sub {
-    do {
-        local $@;
-        my $p = eval {
-            empty_port({ host => '::1' });
-        };
-        plan skip_all => "IPv6 not supported"
-            if $@;
-    };
+    plan skip_all => "IPv6 not supported"
+        unless can_bind("::1");
     doit('::1');
 };
 
