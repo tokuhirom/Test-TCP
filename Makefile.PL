@@ -40,6 +40,6 @@ if ($ExtUtils::MakeMaker::VERSION >= 6.57_01) {
 WriteMakefile(
     NAME     => 'Test::TCP',
     DISTNAME => 'Test-TCP',
-    VERSION  => '2.09',
+    VERSION  => '2.10',
     %args,
 );
