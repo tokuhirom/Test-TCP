@@ -11,7 +11,7 @@ sub can_bind {
     my ($host, $port, $proto) = @_;
     $port ||= 0;
     $proto ||= 'tcp';
-    !! IO::Socket::IP->new(
+    my $s = IO::Socket::IP->new(
         (($proto eq 'udp') ? () : (Listen => 5)),
         LocalAddr => $host,
         LocalPort => $port,
@@ -19,6 +19,7 @@ sub can_bind {
         V6Only    => 1,
         (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
     );
+    defined $s;
 }
 
 # get a empty port on 49152 .. 65535
