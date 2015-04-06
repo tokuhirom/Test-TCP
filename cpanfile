@@ -1,5 +1,6 @@
 requires 'perl', 5.008_001;
 requires 'IO::Socket::INET';
+requires 'IO::Socket::IP';
 requires 'Test::SharedFork', '0.29';
 requires 'Test::More';
 requires 'Time::HiRes';
@@ -7,7 +8,6 @@ requires 'Time::HiRes';
 on test => sub {
     requires 'Test::More', '0.98';
     requires 'File::Temp';
-    requires 'IO::Socket::IP';
     requires 'Socket';
 };
 
