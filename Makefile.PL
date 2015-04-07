@@ -27,8 +27,8 @@ if ($ExtUtils::MakeMaker::VERSION >= 6.64) {
 
     $args{CONFIGURE_REQUIRES} = {"ExtUtils::MakeMaker" => "6.64"};
     $args{BUILD_REQUIRES}     = {};
-    $args{TEST_REQUIRES}      = {"File::Temp" => 0,"IO::Socket::IP" => 0,"Socket" => 0,"Test::More" => "0.98"};
-    $args{PREREQ_PM}          = {"IO::Socket::INET" => 0,"Test::More" => 0,"Test::SharedFork" => "0.29","Time::HiRes" => 0,"perl" => "5.008001"};
+    $args{TEST_REQUIRES}      = {"File::Temp" => 0,"Socket" => 0,"Test::More" => "0.98"};
+    $args{PREREQ_PM}          = {"IO::Socket::INET" => 0,"IO::Socket::IP" => 0,"Test::More" => 0,"Test::SharedFork" => "0.29","Time::HiRes" => 0,"perl" => "5.008001"};
 } else {
     $args{PREREQ_PM}          = {"ExtUtils::MakeMaker" => "6.64","File::Temp" => 0,"IO::Socket::INET" => 0,"IO::Socket::IP" => 0,"Socket" => 0,"Test::More" => "0.98","Test::SharedFork" => "0.29","Time::HiRes" => 0,"perl" => "5.008001"};
 }
@@ -40,6 +40,6 @@ if ($ExtUtils::MakeMaker::VERSION >= 6.57_01) {
 WriteMakefile(
     NAME     => 'Test::TCP',
     DISTNAME => 'Test-TCP',
-    VERSION  => '2.10',
+    VERSION  => '2.11',
     %args,
 );

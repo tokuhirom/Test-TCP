@@ -46,6 +46,7 @@
       "runtime" : {
          "requires" : {
             "IO::Socket::INET" : "0",
+            "IO::Socket::IP" : "0",
             "Test::More" : "0",
             "Test::SharedFork" : "0.29",
             "Time::HiRes" : "0",
@@ -55,7 +56,6 @@
       "test" : {
          "requires" : {
             "File::Temp" : "0",
-            "IO::Socket::IP" : "0",
             "Socket" : "0",
             "Test::More" : "0.98"
          }
@@ -73,7 +73,7 @@
          "web" : "https://github.com/tokuhirom/Test-TCP"
       }
    },
-   "version" : "2.10",
+   "version" : "2.11",
    "x_contributors" : [
       "tokuhirom <tokuhirom@d0d07461-0603-4401-acd4-de1884942a52>",
       "mattn <mattn@d0d07461-0603-4401-acd4-de1884942a52>",
@@ -91,6 +91,7 @@
       "Neil Bowers <neil@bowers.com>",
       "Pavel Shaydo <zwon@cpan.org>",
       "Petr Písař <ppisar@redhat.com>",
+      "Bartosz Jakubski <b.jakubski@gmail.com>",
       "Kazuho Oku <kazuhooku@gmail.com>"
    ]
 }

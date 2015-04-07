@@ -2,6 +2,9 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.11 2015-04-07T00:07:25Z
+    - declare IO::Socket::IP as dependency #36
+
 2.10 2015-04-06T19:23:43Z
     - ensure the test object is DESTROYed when Net::EmptyPort::empty_port exits https://rt.cpan.org/Public/Bug/Display.html?id=103299
 
