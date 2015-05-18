@@ -191,7 +191,7 @@ Test::TCP is test utilities for TCP/IP programs.
 
 - How do I use address other than "127.0.0.1" for testing?
 
-    You can use the `host` paramater to specify the bind address.
+    You can use the `host` parameter to specify the bind address.
 
         # let the server bind to "0.0.0.0" for testing
         test_tcp(

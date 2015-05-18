@@ -2,6 +2,11 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.12 2015-05-18T08:14:30Z
+
+    - Fixed spelling mistake
+      (Reported by gregor herrmann)
+
 2.11 2015-04-07T00:07:25Z
     - declare IO::Socket::IP as dependency #36
 

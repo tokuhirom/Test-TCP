@@ -9,37 +9,60 @@ use strict;
 use ExtUtils::MakeMaker;
 
 
-use File::Copy;
-
-print "cp META.json MYMETA.json\n";
-copy("META.json","MYMETA.json") or die "Copy failed(META.json): $!";
-
-if (-f 'META.yml') {
-    print "cp META.yml MYMETA.yml\n";
-    copy("META.yml","MYMETA.yml") or die "Copy failed(META.yml): $!";
-} else {
-    print "There is no META.yml... You may install this module from the repository...\n";
-}
-
-my %args;
-if ($ExtUtils::MakeMaker::VERSION >= 6.64) {
-    # *_REQUIRES was supported.
-
-    $args{CONFIGURE_REQUIRES} = {"ExtUtils::MakeMaker" => "6.64"};
-    $args{BUILD_REQUIRES}     = {};
-    $args{TEST_REQUIRES}      = {"File::Temp" => 0,"Socket" => 0,"Test::More" => "0.98"};
-    $args{PREREQ_PM}          = {"IO::Socket::INET" => 0,"IO::Socket::IP" => 0,"Test::More" => 0,"Test::SharedFork" => "0.29","Time::HiRes" => 0,"perl" => "5.008001"};
-} else {
-    $args{PREREQ_PM}          = {"ExtUtils::MakeMaker" => "6.64","File::Temp" => 0,"IO::Socket::INET" => 0,"IO::Socket::IP" => 0,"Socket" => 0,"Test::More" => "0.98","Test::SharedFork" => "0.29","Time::HiRes" => 0,"perl" => "5.008001"};
-}
-
-if ($ExtUtils::MakeMaker::VERSION >= 6.57_01) {
-    $args{NO_MYMETA} = 1;
-}
-
-WriteMakefile(
+my %WriteMakefileArgs = (
     NAME     => 'Test::TCP',
     DISTNAME => 'Test-TCP',
-    VERSION  => '2.11',
-    %args,
+    VERSION  => '2.12',
+    CONFIGURE_REQUIRES => {
+  "ExtUtils::MakeMaker" => 0
+}
+,
+    BUILD_REQUIRES     => {}
+,
+    TEST_REQUIRES      => {
+  "File::Temp" => 0,
+  "Socket" => 0,
+  "Test::More" => "0.98"
+}
+,
+    PREREQ_PM          => {
+  "IO::Socket::INET" => 0,
+  "IO::Socket::IP" => 0,
+  "Test::More" => 0,
+  "Test::SharedFork" => "0.29",
+  "Time::HiRes" => 0,
+  "perl" => "5.008001"
+}
+,
 );
+
+my $full_prereqs = {
+  "ExtUtils::MakeMaker" => 0,
+  "File::Temp" => 0,
+  "IO::Socket::INET" => 0,
+  "IO::Socket::IP" => 0,
+  "Socket" => 0,
+  "Test::More" => "0.98",
+  "Test::SharedFork" => "0.29",
+  "Time::HiRes" => 0,
+  "perl" => "5.008001"
+}
+;
+
+unless (eval { ExtUtils::MakeMaker->VERSION(6.63_03) }) {
+    delete $WriteMakefileArgs{TEST_REQUIRES};
+    delete $WriteMakefileArgs{BUILD_REQUIRES};
+    $WriteMakefileArgs{PREREQ_PM} = $full_prereqs;
+}
+
+unless (eval { ExtUtils::MakeMaker->VERSION(6.52) }) {
+    delete $WriteMakefileArgs{CONFIGURE_REQUIRES};
+}
+
+unless (eval { ExtUtils::MakeMaker->VERSION(6.57_01) }) {
+    use File::Copy;
+    copy('META.yml', 'MYMETA.yml')   or warn "META.yml: $!";
+    copy('META.json', 'MYMETA.json') or warn "META.json: $!";
+}
+
+WriteMakefile(%WriteMakefileArgs);
