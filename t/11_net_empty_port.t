@@ -36,4 +36,28 @@ subtest 'v6' => sub {
     doit('::1');
 };
 
+my $port = empty_port (8080, 'tcp');
+ok ($port, 'Non hashref arg to empty_port');
+cmp_ok ($port, '<', 49152, 'Specified low port to empty_port');
+$port = empty_port (50000, 'tcp');
+cmp_ok ($port, '>', 49151, 'Specified high port to empty_port');
+$port = empty_port ('alpha', 'tcp');
+cmp_ok ($port, '>', 49151, 'Specified non-numeric port to empty_port');
+$port = empty_port ('alpha', 'udp');
+cmp_ok ($port, '>', 49151, 'Specified non-numeric port and udp proto to empty_port');
+
+
+$port = empty_port ();
+ok (!wait_port ($port, 0.1, 2, 'tcp'),
+	'4 args to wait_port (backwards compat)');
+ok (!wait_port ($port, 0.2, 'tcp'),
+	'3 args to wait_port');
+eval { wait_port (); };
+like ($@, qr/Expected .PeerService./, 'No args to wait_port is fatal');
+ok (!wait_port ($port), 'No max_wait to wait_port');
+
+eval { check_port (); };
+like ($@, qr/Expected .PeerService./, 'No args to check_port is fatal');
+ok (!check_port (empty_port(), 'tcp'), '2 args to check_port');
+
 done_testing;

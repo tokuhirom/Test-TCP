@@ -1,6 +1,6 @@
 use warnings;
 use strict;
-use Test::More tests => 3;
+use Test::More tests => 9;
 use Test::TCP;
 use IO::Socket::INET;
 use t::Server;
@@ -33,3 +33,17 @@ if ($?) {
     $? = 0;
 }
 
+eval { test_tcp (); };
+$e = $@;
+ok ($e, 'No client is fatal error');
+like ($e, qr/missing mandatory parameter client/, 'No client is fatal error');
+
+eval { test_tcp (client => 1); };
+$e = $@;
+ok ($e, 'No server is fatal error');
+like ($e, qr/missing mandatory parameter server/, 'No server is fatal error');
+
+eval { Test::TCP->new (); };
+$e = $@;
+ok ($e, 'No code is fatal error');
+like ($e, qr/missing mandatory parameter 'code'/, 'No code is fatal error');

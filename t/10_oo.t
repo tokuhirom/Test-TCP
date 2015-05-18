@@ -1,6 +1,6 @@
 use warnings;
 use strict;
-use Test::More tests => 22;
+use Test::More tests => 24;
 use Test::TCP;
 use IO::Socket::INET;
 use t::Server;
@@ -43,6 +43,22 @@ if ($?) {
     diag "test_tcp() leaks \$?. Maybe it's Perl bug?: $?";
     $? = 0;
 }
+
+my $s2 = Test::TCP->new (
+	code	=>	sub { return 1; },
+	port	=>	8080,
+	auto_start => 0
+);
+is ($s2->port, 8080, 'Specify port');
+
+$s2 = Test::TCP->new (
+	{
+		code	=>	sub { return 1; },
+		port	=>	8080,
+		auto_start => 0
+	}
+);
+is ($s2->port, 8080, 'Args as hashref');
 
 done_testing;
 
