@@ -31,7 +31,7 @@ subtest 'v4' => sub {
 
 subtest 'v6' => sub {
     plan skip_all => "IPv6 not supported"
-        unless can_bind('::1');
+        unless eval { Socket::IPV6_V6ONLY } and can_bind("::1");
     ok "found an empty port";
     doit('::1');
 };
