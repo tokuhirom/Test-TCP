@@ -46,7 +46,7 @@ And functional interface is available:
 
 # DESCRIPTION
 
-Test::TCP is test utilities for TCP/IP programs.
+Test::TCP is a test utility to test TCP/IP-based server programs.
 
 # METHODS
 
@@ -75,7 +75,7 @@ Test::TCP is test utilities for TCP/IP programs.
 
     Waits for a particular port is available for connect.
 
-# OO-ish interface
+# Object Oriented interface
 
 - my $server = Test::TCP->new(%args);
 
@@ -145,7 +145,7 @@ Test::TCP is test utilities for TCP/IP programs.
             },
         );
 
-    Or use OO-ish interface instead.
+    Or use the OO interface instead.
 
         my $server1 = Test::TCP->new(code => sub {
             my $port1 = shift;

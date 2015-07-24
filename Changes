@@ -2,6 +2,10 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.13 2015-07-24T02:30:17Z
+
+    - check whether the OS implements IPV6_V6ONLY before using it
+
 2.12 2015-05-18T08:14:30Z
 
     - Fixed spelling mistake
