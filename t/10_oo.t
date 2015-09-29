@@ -13,6 +13,7 @@ my $server = Test::TCP->new(
             note "new request";
             my ($remote, $line, $sock) = @_;
             print {$remote} $line;
+            exit 0 if $line eq "quit\n";
         });
     }
 );
@@ -43,6 +44,8 @@ if ($?) {
     diag "test_tcp() leaks \$?. Maybe it's Perl bug?: $?";
     $? = 0;
 }
+
+waitpid($server->pid, 0);
 
 done_testing;
 
