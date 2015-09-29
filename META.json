@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.4.3, CPAN::Meta::Converter version 2.150001",
+   "generated_by" : "Minilla/v2.5.0, CPAN::Meta::Converter version 2.150005",
    "license" : [
       "perl_5"
    ],
@@ -28,7 +28,7 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.64"
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "develop" : {
@@ -73,7 +73,7 @@
          "web" : "https://github.com/tokuhirom/Test-TCP"
       }
    },
-   "version" : "2.13",
+   "version" : "2.14",
    "x_contributors" : [
       "tokuhirom <tokuhirom@d0d07461-0603-4401-acd4-de1884942a52>",
       "mattn <mattn@d0d07461-0603-4401-acd4-de1884942a52>",
@@ -93,6 +93,8 @@
       "Kazuho Oku <kazuhooku@gmail.com>",
       "Christian Walde <walde.christian@googlemail.com>",
       "Tatsuhiko Miyagawa <miyagawa@gmail.com>",
-      "Tatsuhiko Miyagawa <miyagawa@bulknews.net>"
-   ]
+      "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
+      "Chad Granum <exodist7@gmail.com>"
+   ],
+   "x_serialization_backend" : "JSON::PP version 2.27300"
 }

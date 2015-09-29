@@ -225,7 +225,7 @@ Test::TCP is a test utility to test TCP/IP-based server programs.
 
 # AUTHOR
 
-Tokuhiro Matsuno <tokuhirom@gmail.com>
+Tokuhiro Matsuno &lt;tokuhirom@gmail.com>
 
 # THANKS TO
 

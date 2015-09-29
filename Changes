@@ -2,6 +2,10 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.14 2015-09-29T22:36:44Z
+
+    - Fix race condition in t/10_oo.t(exodist)
+
 2.13 2015-07-24T02:30:17Z
 
     - check whether the OS implements IPV6_V6ONLY before using it
