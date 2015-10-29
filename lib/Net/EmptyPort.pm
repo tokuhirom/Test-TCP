@@ -26,7 +26,7 @@ sub can_bind {
 # http://www.iana.org/assignments/port-numbers
 sub empty_port {
     my ($host, $port, $proto) = @_ && ref $_[0] eq 'HASH' ? ($_[0]->{host}, $_[0]->{port}, $_[0]->{proto}) : (undef, @_);
-    $host = '127.0.0.1'
+    $host = '0.0.0.0'
         unless defined $host;
     if (defined $port) {
         $port = 49152 unless $port =~ /^[0-9]+$/ && $port < 49152;
