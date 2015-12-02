@@ -12,11 +12,11 @@ use POSIX;
 use Time::HiRes ();
 use Carp ();
 use File::Temp qw/ tempdir /;
+use Net::EmptyPort ();
 
 our @EXPORT = qw/ test_unix_sock wait_unix_sock /;
 
-# process does not die when received SIGTERM, on win32.
-my $TERMSIG = $^O eq 'MSWin32' ? 'KILL' : 'TERM';
+my $TERMSIG = 'TERM';
 
 sub test_unix_sock {
     my %args = @_;
@@ -47,13 +47,14 @@ sub wait_unix_sock {
         ($path, $max_wait) = @_;
     }
     $max_wait ||= 10;
-    while (--$max_wait > 0) {
+    my $waiter = Net::EmptyPort::_make_waiter($max_wait);
+    while ( $waiter->() ) {
         IO::Socket::UNIX->new(
             Type => SOCK_STREAM,
             Peer => $path,
-        ) && return;
-        sleep 1;
+        ) && return 1;
     }
+    return 0;
 }
 
 # ------------------------------------------------------------------------- 
