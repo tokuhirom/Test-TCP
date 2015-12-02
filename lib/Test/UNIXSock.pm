@@ -68,10 +68,12 @@ sub new {
         auto_start => 1,
         max_wait   => 10,
         _my_pid    => $$,
-        tmpdir     => tempdir( CLEANUP => 1 ),
         %args,
     }, $class;
-    $self->{path} ||= $self->{tmpdir} . "/test.sock";
+    unless (defined $self->{path}) {
+        $self->{tmpdir} = tempdir( CLEANUP => 1 );
+        $self->{path} = $self->{tmpdir} . "/test.sock";
+    }
     $self->start()
       if $self->{auto_start};
     return $self;
