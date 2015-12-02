@@ -2,7 +2,7 @@ package Test::UNIXSock;
 use strict;
 use warnings;
 use 5.00800;
-our $VERSION = '2.12';
+our $VERSION = '2.14';
 use base qw/Exporter/;
 use IO::Socket::UNIX;
 use Test::SharedFork 0.12;
@@ -134,99 +134,98 @@ sub DESTROY {
 1;
 __END__
 
-=for stopwords OO-ish
+=for stopwords OO
 
 =encoding utf8
 
 =head1 NAME
 
-Test::TCP - testing TCP program
+Test::UNIXSock - testing UNIX domain socket program
 
 =head1 SYNOPSIS
 
-    use Test::TCP;
+    use Test::UNIXSock;
 
-    my $server = Test::TCP->new(
+    my $server = Test::UNIXSock->new(
         code => sub {
-            my $port = shift;
+            my $path = shift;
             ...
         },
     );
-    my $client = MyClient->new(host => '127.0.0.1', port => $server->port);
+    my $client = MyClient->new( sock => $server->path );
     undef $server; # kill child process on DESTROY
 
 Using memcached:
 
-    use Test::TCP;
+    use Test::UNIXSock;
 
-    my $memcached = Test::TCP->new(
+    my $memcached = Test::UNIXSock->new(
         code => sub {
-            my $port = shift;
+            my $path = shift;
 
-            exec $bin, '-p' => $port;
+            exec $bin, '-s' => $path;
             die "cannot execute $bin: $!";
         },
     );
-    my $memd = Cache::Memcached->new({servers => ['127.0.0.1:' . $memcached->port]});
+    my $memd = Cache::Memcached->new({servers => [$memcached->path]});
     ...
 
 And functional interface is available:
 
-    use Test::TCP;
-    test_tcp(
+    use Test::UNIXSock;
+    test_unix_sock(
         client => sub {
-            my ($port, $server_pid) = @_;
+            my ($path, $server_pid) = @_;
             # send request to the server
         },
         server => sub {
-            my $port = shift;
+            my $path = shift;
             # run server
         },
     );
 
 =head1 DESCRIPTION
 
-Test::TCP is test utilities for TCP/IP programs.
+Test::UNIXSock is a test utility to test UNIX domain socket server programs.
 
 =head1 METHODS
 
 =over 4
 
-=item test_tcp
+=item test_unixsock
 
 Functional interface.
 
-    test_tcp(
+    test_unixsock(
         client => sub {
-            my $port = shift;
+            my $path = shift;
             # send request to the server
         },
         server => sub {
-            my $port = shift;
+            my $path = shift;
             # run server
         },
         # optional
-        host => '127.0.0.1', # specify '::1' to test using IPv6
-        port => 8080,
+        path => "/tmp/mytest.sock", # if not specified, create a sock in tmpdir
         max_wait => 3, # seconds
     );
 
 
-=item wait_port
+=item wait_unix_sock
 
-    wait_port(8080);
+    wait_unix_sock({ path => $path });
 
-Waits for a particular port is available for connect.
+Waits for a particular path is available for connect.
 
 =back
 
-=head1 OO-ish interface
+=head1 Object Oriented interface interface
 
 =over 4
 
-=item my $server = Test::TCP->new(%args);
+=item my $server = Test::UNIXSock->new(%args);
 
-Create new instance of Test::TCP.
+Create new instance of Test::UNIXSock.
 
 Arguments are following:
 
@@ -274,115 +273,13 @@ Get the port number of child process.
 
 =head1 FAQ
 
-=over 4
-
-=item How to invoke two servers?
-
-You can call test_tcp() twice!
-
-    test_tcp(
-        client => sub {
-            my $port1 = shift;
-            test_tcp(
-                client => sub {
-                    my $port2 = shift;
-                    # some client code here
-                },
-                server => sub {
-                    my $port2 = shift;
-                    # some server2 code here
-                },
-            );
-        },
-        server => sub {
-            my $port1 = shift;
-            # some server1 code here
-        },
-    );
-
-Or use OO-ish interface instead.
-
-    my $server1 = Test::TCP->new(code => sub {
-        my $port1 = shift;
-        ...
-    });
-    my $server2 = Test::TCP->new(code => sub {
-        my $port2 = shift;
-        ...
-    });
-
-    # your client code here.
-    ...
-
-=item How do you test server program written in other languages like memcached?
-
-You can use C<exec()> in child process.
-
-    use strict;
-    use warnings;
-    use utf8;
-    use Test::More;
-    use Test::TCP 1.08;
-    use File::Which;
-
-    my $bin = scalar which 'memcached';
-    plan skip_all => 'memcached binary is not found' unless defined $bin;
-
-    my $memcached = Test::TCP->new(
-        code => sub {
-            my $port = shift;
-
-            exec $bin, '-p' => $port;
-            die "cannot execute $bin: $!";
-        },
-    );
-
-    use Cache::Memcached;
-    my $memd = Cache::Memcached->new({servers => ['127.0.0.1:' . $memcached->port]});
-    $memd->set(foo => 'bar');
-    is $memd->get('foo'), 'bar';
-
-    done_testing;
-
-=item How do I use address other than "127.0.0.1" for testing?
-
-You can use the C<< host >> parameter to specify the bind address.
-
-    # let the server bind to "0.0.0.0" for testing
-    test_tcp(
-        client => sub {
-            ...
-        },
-        server => sub {
-            ...
-        },
-        host => '0.0.0.0',
-    );
-
-=item How should I write IPv6 tests?
-
-You should use the `Net::EmptyPort::can_bind` function to check if the program can bind to the loopback address of IPv6, as well as the `host` parameter of the `test_tcp` function to specify the same address as the bind address.
-
-    use Net::EmptyPort qw(can_bind);
-
-    plan skip_all => "IPv6 not available"
-        unless can_bind('::1');
-
-    test_tcp(
-        client => sub {
-            ...
-        },
-        server => sub {
-            ...
-        },
-        host => '::1',
-    );
-
-=back
+See L<Test::TCP> FAQ section.
 
 =head1 AUTHOR
 
 Tokuhiro Matsuno E<lt>tokuhirom@gmail.comE<gt>
+
+Fujiwara Shunichiro E<lt>fujiwara.shunichiro@gmail.comE<gt>
 
 =head1 THANKS TO
 
@@ -397,6 +294,8 @@ Tatsuhiko Miyagawa
 lestrrat
 
 =head1 SEE ALSO
+
+L<Test::TCP>
 
 =head1 LICENSE
 
