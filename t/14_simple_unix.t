@@ -1,5 +1,13 @@
 use warnings;
 use strict;
+
+BEGIN {
+    if ($^O =~ m/^(?:qnx|nto|vos|MSWin32)$/ ) {
+        print "1..0 # Skip: UNIX domain sockets not implemented on $^O\n";
+        exit 0;
+    }
+};
+
 use Test::More;
 use Test::UNIXSock;
 use IO::Socket::UNIX;
