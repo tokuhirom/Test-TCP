@@ -6,12 +6,18 @@ use IO::Socket::IP;
 use Time::HiRes ();
 
 our @EXPORT = qw/ can_bind empty_port check_port wait_port /;
+our @EXPORT_OK = qw/ listen_socket /;
 
 sub can_bind {
     my ($host, $port, $proto) = @_;
-    $port ||= 0;
+    defined _listen_socket($host, $port, $proto);
+}
+
+sub _listen_socket {
+    my ($host, $port, $proto) = @_;
+    $port  ||= 0;
     $proto ||= 'tcp';
-    my $s = IO::Socket::IP->new(
+    IO::Socket::IP->new(
         (($proto eq 'udp') ? () : (Listen => 5)),
         LocalAddr => $host,
         LocalPort => $port,
@@ -19,7 +25,12 @@ sub can_bind {
         V6Only    => 1,
         (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
     );
-    defined $s;
+}
+
+sub listen_socket {
+    my ($host, $proto) = @{$_[0]}{qw(host proto)};
+    $host = '127.0.0.1' unless defined $host;
+    return _listen_socket($host, undef, $proto);
 }
 
 # get a empty port on 49152 .. 65535
@@ -131,6 +142,9 @@ Net::EmptyPort - find a free TCP/UDP port
 
     use Net::EmptyPort qw(empty_port check_port);
 
+    # get a socket listening on a random free port
+    my $socket = listen_socket();
+
     # get a random free port
     my $port = empty_port();
 
@@ -146,6 +160,30 @@ Net::EmptyPort helps finding an empty TCP/UDP port.
 =head1 METHODS
 
 =over 4
+
+=item C<< listen_socket() >>
+
+=item C<< listen_socket(\%args) >>
+
+
+    my $socket = listen_socket();
+
+Returns a socket listening on a free port.
+
+The function recognizes the following keys in the hashref argument.
+
+=over 4
+
+=item C<< host >>
+
+The address on which to listen.  Default is C<< 127.0.0.1 >>.
+
+=item C<< proto >>
+
+Name of the protocol.  Default is C<< tcp >>.
+You can get an UDP socket by specifying C<< udp >>.
+
+=back
 
 =item C<< empty_port() >>
 
