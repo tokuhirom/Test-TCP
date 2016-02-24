@@ -23,7 +23,19 @@ sub doit {
 };
 
 ok can_bind('127.0.0.1'), 'bind to 127.0.0.1';
-ok ! can_bind('8.8.8.8'), 'bind to an unavailable address';
+
+# Skip this check if binding to non-local addresses is enabled (most common
+# on load balancers with floating IPs)
+SKIP: {
+    if (-f '/proc/sys/net/ipv4/ip_nonlocal_bind') {
+        open my $fh, "<", "/proc/sys/net/ipv4/ip_nonlocal_bind";
+        if (<$fh> =~ /1/) {
+            skip "Binding to non-local adddresses is allowed";
+        } else {
+            ok ! can_bind('8.8.8.8'), 'bind to an unavailable address';
+        }
+    }
+}
 
 subtest 'v4' => sub {
     doit('127.0.0.1');
