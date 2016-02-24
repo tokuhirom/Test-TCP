@@ -23,7 +23,7 @@ sub doit {
 };
 
 ok can_bind('127.0.0.1'), 'bind to 127.0.0.1';
-ok ! can_bind('8.8.8.8'), 'bind to an anvailable address';
+ok ! can_bind('8.8.8.8'), 'bind to an unavailable address';
 
 subtest 'v4' => sub {
     doit('127.0.0.1');
