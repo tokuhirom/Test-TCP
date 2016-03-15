@@ -73,7 +73,7 @@
          "web" : "https://github.com/tokuhirom/Test-TCP"
       }
    },
-   "version" : "2.14",
+   "version" : "2.15",
    "x_contributors" : [
       "tokuhirom <tokuhirom@d0d07461-0603-4401-acd4-de1884942a52>",
       "mattn <mattn@d0d07461-0603-4401-acd4-de1884942a52>",
@@ -94,7 +94,8 @@
       "Christian Walde <walde.christian@googlemail.com>",
       "Tatsuhiko Miyagawa <miyagawa@gmail.com>",
       "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
-      "Chad Granum <exodist7@gmail.com>"
+      "Chad Granum <exodist7@gmail.com>",
+      "Dagfinn Ilmari Mannsåker <ilmari@ilmari.org>"
    ],
    "x_serialization_backend" : "JSON::PP version 2.27300"
 }

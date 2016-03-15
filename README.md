@@ -7,15 +7,16 @@ Test::TCP - testing TCP program
     use Test::TCP;
 
     my $server = Test::TCP->new(
+        listen => 1,
         code => sub {
-            my $port = shift;
+            my $socket = shift;
             ...
         },
     );
     my $client = MyClient->new(host => '127.0.0.1', port => $server->port);
     undef $server; # kill child process on DESTROY
 
-Using memcached:
+If using a server that can only accept a port number, e.g. memcached:
 
     use Test::TCP;
 
@@ -30,9 +31,24 @@ Using memcached:
     my $memd = Cache::Memcached->new({servers => ['127.0.0.1:' . $memcached->port]});
     ...
 
+**N.B.**: This is vulnerable to race conditions, if another process binds
+to the same port after [Net::EmptyPort](https://metacpan.org/pod/Net::EmptyPort) found it available.
+
 And functional interface is available:
 
     use Test::TCP;
+    test_tcp(
+        listen => 1,
+        client => sub {
+            my ($port, $server_pid) = @_;
+            # send request to the server
+        },
+        server => sub {
+            my $socket = shift;
+            # run server, calling $socket->accept
+        },
+    );
+
     test_tcp(
         client => sub {
             my ($port, $server_pid) = @_;
@@ -40,7 +56,7 @@ And functional interface is available:
         },
         server => sub {
             my $port = shift;
-            # run server
+            # run server, binding to $port
         },
     );
 
@@ -55,12 +71,13 @@ Test::TCP is a test utility to test TCP/IP-based server programs.
     Functional interface.
 
         test_tcp(
+            listen => 1,
             client => sub {
                 my $port = shift;
                 # send request to the server
             },
             server => sub {
-                my $port = shift;
+                my $socket = shift;
                 # run server
             },
             # optional
@@ -68,6 +85,9 @@ Test::TCP is a test utility to test TCP/IP-based server programs.
             port => 8080,
             max_wait => 3, # seconds
         );
+
+    If `listen` is false, `server` is instead passed a port number that
+    was free before it was called.
 
 - wait\_port
 
@@ -91,7 +111,9 @@ Test::TCP is a test utility to test TCP/IP-based server programs.
 
     - $args{code}: CodeRef
 
-        The callback function. Argument for callback function is: `$code->($pid)`.
+        The callback function. Argument for callback function is:
+        `$code->($socket)` or `$code->($port)`,
+        depending on the value of `listen`.
 
         This parameter is required.
 
@@ -102,6 +124,11 @@ Test::TCP is a test utility to test TCP/IP-based server programs.
         See also [Net::EmptyPort](https://metacpan.org/pod/Net::EmptyPort).
 
         _Default: 10_
+
+    - $args{listen} : Boolean
+
+        If true, open a listening socket and pass this to the callback.
+        Otherwise find a free port and pass the number of it to the callback.
 
 - $server->start()
 

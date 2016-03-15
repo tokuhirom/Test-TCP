@@ -2,6 +2,8 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.15 2016-03-15T00:25:52Z
+
     - Add listen_socket function and listen option for race-free operation
 
 2.14 2015-09-29T22:36:44Z

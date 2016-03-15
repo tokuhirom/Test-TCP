@@ -12,7 +12,7 @@ use ExtUtils::MakeMaker;
 my %WriteMakefileArgs = (
     NAME     => 'Test::TCP',
     DISTNAME => 'Test-TCP',
-    VERSION  => '2.14',
+    VERSION  => '2.15',
     EXE_FILES => [glob('script/*'), glob('bin/*')],
     CONFIGURE_REQUIRES => {
   "ExtUtils::MakeMaker" => 0
