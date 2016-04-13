@@ -36,4 +36,13 @@ subtest 'v6' => sub {
     doit('::1');
 };
 
+subtest 'return value' => sub {
+    my $sock = IO::Socket::IP->new(
+        LocalAddr => '127.0.0.1',
+        LocalPort => empty_port(),
+        Listen    => 1,
+    );
+    ok $sock;
+};
+
 done_testing;

@@ -10,7 +10,10 @@ our @EXPORT_OK = qw/ listen_socket /;
 
 sub can_bind {
     my ($host, $port, $proto) = @_;
-    defined _listen_socket($host, $port, $proto);
+    # The following must be split across two statements, due to
+    # https://rt.perl.org/Public/Bug/Display.html?id=124248
+    my $s = _listen_socket($host, $port, $proto);
+    return defined $s;
 }
 
 sub _listen_socket {
