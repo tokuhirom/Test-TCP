@@ -6,7 +6,13 @@ use Net::EmptyPort qw();
 
 our @EXPORT = qw/ check_port /;
 
-sub check_port { print Net::EmptyPort::check_port( @ARGV ) }
+sub check_port {
+    if ( @ARGV == 3) {
+        print Net::EmptyPort::check_port( { host => $ARGV[0], port => $ARGV[1], proto => $ARGV[2] } );
+    } else {
+        print Net::EmptyPort::check_port( @ARGV );
+    }
+}
 
 1;
 
