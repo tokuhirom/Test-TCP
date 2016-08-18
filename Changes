@@ -2,6 +2,10 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.17 2016-08-18T14:42:56Z
+    - check_port can take 'host' argument(#55)
+    - Fix test on Windows issue(#55)
+
 2.16 2016-04-13T02:27:43Z
 
     commit 3ae73a349f70f06c60de3f635916929bc8643429
