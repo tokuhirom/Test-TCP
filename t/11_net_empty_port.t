@@ -49,9 +49,9 @@ cmp_ok ($port, '>', 49151, 'Specified non-numeric port and udp proto to empty_po
 
 $port = empty_port ();
 ok (!wait_port ($port, 0.1, 2, 'tcp'),
-	'4 args to wait_port (backwards compat)');
+    '4 args to wait_port (backwards compat)');
 ok (!wait_port ($port, 0.2, 'tcp'),
-	'3 args to wait_port');
+    '3 args to wait_port');
 eval { wait_port (); };
 like ($@, qr/Expected .PeerService./, 'No args to wait_port is fatal');
 ok (!wait_port ($port), 'No max_wait to wait_port');

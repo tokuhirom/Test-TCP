@@ -45,18 +45,18 @@ if ($?) {
 }
 
 my $s2 = Test::TCP->new (
-	code	=>	sub { return 1; },
-	port	=>	8080,
-	auto_start => 0
+    code        => sub { return 1; },
+    port        => 8080,
+    auto_start  => 0
 );
 is ($s2->port, 8080, 'Specify port');
 
 $s2 = Test::TCP->new (
-	{
-		code	=>	sub { return 1; },
-		port	=>	8080,
-		auto_start => 0
-	}
+    {
+        code        => sub { return 1; },
+        port        => 8080,
+        auto_start  => 0
+    }
 );
 is ($s2->port, 8080, 'Args as hashref');
 
