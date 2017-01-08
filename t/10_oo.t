@@ -44,6 +44,8 @@ if ($?) {
     $? = 0;
 }
 
+waitpid($server->pid, 0);
+
 my $s2 = Test::TCP->new (
     code        => sub { return 1; },
     port        => 8080,

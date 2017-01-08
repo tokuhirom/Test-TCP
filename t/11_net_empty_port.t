@@ -36,6 +36,15 @@ subtest 'v6' => sub {
     doit('::1');
 };
 
+subtest 'return value' => sub {
+    my $sock = IO::Socket::IP->new(
+        LocalAddr => '127.0.0.1',
+        LocalPort => empty_port(),
+        Listen    => 1,
+    );
+    ok $sock;
+};
+
 my $port = empty_port (8080, 'tcp');
 ok ($port, 'Non hashref arg to empty_port');
 cmp_ok ($port, '<', 49152, 'Specified low port to empty_port');
