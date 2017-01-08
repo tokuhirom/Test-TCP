@@ -13,6 +13,7 @@ my $server = Test::TCP->new(
             note "new request";
             my ($remote, $line, $sock) = @_;
             print {$remote} $line;
+            exit 0 if $line eq "quit\n";
         });
     }
 );

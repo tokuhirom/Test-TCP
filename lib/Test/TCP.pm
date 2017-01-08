@@ -2,9 +2,8 @@ package Test::TCP;
 use strict;
 use warnings;
 use 5.00800;
-our $VERSION = '2.11';
+our $VERSION = '2.17';
 use base qw/Exporter/;
-use IO::Socket::INET;
 use Test::SharedFork 0.12;
 use Test::More ();
 use Config;
@@ -69,7 +68,16 @@ sub new {
         _my_pid    => $$,
         %args,
     }, $class;
-    $self->{port} ||= empty_port({ host => $self->{host} });
+    if ($self->{listen}) {
+        $self->{socket} ||= Net::EmptyPort::listen_socket({
+            host => $self->{host},
+            proto => $self->{proto},
+        }) or die "Cannot listen: $!";
+        $self->{port} = $self->{socket}->sockport;
+    }
+    else {
+        $self->{port} ||= empty_port({ host => $self->{host} });
+    }
     $self->start()
       if $self->{auto_start};
     return $self;
@@ -85,10 +93,11 @@ sub start {
 
     if ( $pid ) { # parent process.
         $self->{pid} = $pid;
-        Test::TCP::wait_port({ host => $self->{host}, port => $self->port, max_wait => $self->{max_wait} });
+        Test::TCP::wait_port({ host => $self->{host}, port => $self->port, max_wait => $self->{max_wait} })
+            unless $self->{socket};
         return;
     } else { # child process
-        $self->{code}->($self->port);
+        $self->{code}->($self->{socket} || $self->port);
         # should not reach here
         if (kill 0, $self->{_my_pid}) { # warn only parent process still exists
             warn("[Test::TCP] Child process does not block(PID: $$, PPID: $self->{_my_pid})");
@@ -146,7 +155,7 @@ sub DESTROY {
 1;
 __END__
 
-=for stopwords OO-ish
+=for stopwords OO
 
 =encoding utf8
 
@@ -159,15 +168,16 @@ Test::TCP - testing TCP program
     use Test::TCP;
 
     my $server = Test::TCP->new(
+        listen => 1,
         code => sub {
-            my $port = shift;
+            my $socket = shift;
             ...
         },
     );
     my $client = MyClient->new(host => '127.0.0.1', port => $server->port);
     undef $server; # kill child process on DESTROY
 
-Using memcached:
+If using a server that can only accept a port number, e.g. memcached:
 
     use Test::TCP;
 
@@ -182,9 +192,24 @@ Using memcached:
     my $memd = Cache::Memcached->new({servers => ['127.0.0.1:' . $memcached->port]});
     ...
 
+B<N.B.>: This is vulnerable to race conditions, if another process binds
+to the same port after L<Net::EmptyPort> found it available.
+
 And functional interface is available:
 
     use Test::TCP;
+    test_tcp(
+        listen => 1,
+        client => sub {
+            my ($port, $server_pid) = @_;
+            # send request to the server
+        },
+        server => sub {
+            my $socket = shift;
+            # run server, calling $socket->accept
+        },
+    );
+
     test_tcp(
         client => sub {
             my ($port, $server_pid) = @_;
@@ -192,13 +217,13 @@ And functional interface is available:
         },
         server => sub {
             my $port = shift;
-            # run server
+            # run server, binding to $port
         },
     );
 
 =head1 DESCRIPTION
 
-Test::TCP is test utilities for TCP/IP programs.
+Test::TCP is a test utility to test TCP/IP-based server programs.
 
 =head1 METHODS
 
@@ -209,12 +234,13 @@ Test::TCP is test utilities for TCP/IP programs.
 Functional interface.
 
     test_tcp(
+        listen => 1,
         client => sub {
             my $port = shift;
             # send request to the server
         },
         server => sub {
-            my $port = shift;
+            my $socket = shift;
             # run server
         },
         # optional
@@ -223,6 +249,8 @@ Functional interface.
         max_wait => 3, # seconds
     );
 
+If C<listen> is false, C<server> is instead passed a port number that
+was free before it was called.
 
 =item wait_port
 
@@ -232,7 +260,7 @@ Waits for a particular port is available for connect.
 
 =back
 
-=head1 OO-ish interface
+=head1 Object Oriented interface
 
 =over 4
 
@@ -252,7 +280,9 @@ Default: true
 
 =item $args{code}: CodeRef
 
-The callback function. Argument for callback function is: C<< $code->($pid) >>.
+The callback function. Argument for callback function is:
+C<< $code->($socket) >> or C<< $code->($port) >>,
+depending on the value of C<listen>.
 
 This parameter is required.
 
@@ -263,6 +293,11 @@ Will wait for at most C<$max_wait> seconds before checking port.
 See also L<Net::EmptyPort>.
 
 I<Default: 10>
+
+=item $args{listen} : Boolean
+
+If true, open a listening socket and pass this to the callback.
+Otherwise find a free port and pass the number of it to the callback.
 
 =back
 
@@ -312,7 +347,7 @@ You can call test_tcp() twice!
         },
     );
 
-Or use OO-ish interface instead.
+Or use the OO interface instead.
 
     my $server1 = Test::TCP->new(code => sub {
         my $port1 = shift;
@@ -358,7 +393,7 @@ You can use C<exec()> in child process.
 
 =item How do I use address other than "127.0.0.1" for testing?
 
-You can use the C<< host >> paramater to specify the bind address.
+You can use the C<< host >> parameter to specify the bind address.
 
     # let the server bind to "0.0.0.0" for testing
     test_tcp(

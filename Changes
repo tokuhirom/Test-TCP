@@ -2,6 +2,48 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.17 2016-08-18T14:42:56Z
+    - check_port can take 'host' argument(#55)
+    - Fix test on Windows issue(#55)
+
+2.16 2016-04-13T02:27:43Z
+
+    commit 3ae73a349f70f06c60de3f635916929bc8643429
+    Author: Alex Vandiver <alex@chmrr.net>
+    Date:   Tue Apr 12 00:33:21 2016 -0700
+
+        Ensure that IO::Socket::IP is DESTROY'd before can_bind returns
+        
+        be316f1f worked around a core perl bug[1] which causes Perl < 5.24.0
+        to DESTROY the IO::Socket::IP object too late, causing the empty port
+        to not actually be empty if it was used immediately.
+        
+        Unfortunately, this change was lost in ba745fd1, which again put the
+        return of `can_bind` on the stack along with the actual return value,
+        re-instating the bug.
+        
+        Split the statement across two statements again, and add a comment on
+        the importance of preserving it.
+        
+        [1] https://rt.perl.org/Public/Bug/Display.html?id=124248
+
+2.15 2016-03-15T00:25:52Z
+
+    - Add listen_socket function and listen option for race-free operation
+
+2.14 2015-09-29T22:36:44Z
+
+    - Fix race condition in t/10_oo.t(exodist)
+
+2.13 2015-07-24T02:30:17Z
+
+    - check whether the OS implements IPV6_V6ONLY before using it
+
+2.12 2015-05-18T08:14:30Z
+
+    - Fixed spelling mistake
+      (Reported by gregor herrmann)
+
 2.11 2015-04-07T00:07:25Z
     - declare IO::Socket::IP as dependency #36
 

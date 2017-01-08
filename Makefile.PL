@@ -3,43 +3,38 @@
 # DO NOT EDIT DIRECTLY.
 # =========================================================================
 
-use 5.008_001;
+use 5.006;
 use strict;
 
-use ExtUtils::MakeMaker;
+use ExtUtils::MakeMaker 6.64;
 
 
-use File::Copy;
-
-print "cp META.json MYMETA.json\n";
-copy("META.json","MYMETA.json") or die "Copy failed(META.json): $!";
-
-if (-f 'META.yml') {
-    print "cp META.yml MYMETA.yml\n";
-    copy("META.yml","MYMETA.yml") or die "Copy failed(META.yml): $!";
-} else {
-    print "There is no META.yml... You may install this module from the repository...\n";
-}
-
-my %args;
-if ($ExtUtils::MakeMaker::VERSION >= 6.64) {
-    # *_REQUIRES was supported.
-
-    $args{CONFIGURE_REQUIRES} = {"ExtUtils::MakeMaker" => "6.64"};
-    $args{BUILD_REQUIRES}     = {};
-    $args{TEST_REQUIRES}      = {"File::Temp" => 0,"Socket" => 0,"Test::More" => "0.98"};
-    $args{PREREQ_PM}          = {"IO::Socket::INET" => 0,"IO::Socket::IP" => 0,"Test::More" => 0,"Test::SharedFork" => "0.29","Time::HiRes" => 0,"perl" => "5.008001"};
-} else {
-    $args{PREREQ_PM}          = {"ExtUtils::MakeMaker" => "6.64","File::Temp" => 0,"IO::Socket::INET" => 0,"IO::Socket::IP" => 0,"Socket" => 0,"Test::More" => "0.98","Test::SharedFork" => "0.29","Time::HiRes" => 0,"perl" => "5.008001"};
-}
-
-if ($ExtUtils::MakeMaker::VERSION >= 6.57_01) {
-    $args{NO_MYMETA} = 1;
-}
-
-WriteMakefile(
+my %WriteMakefileArgs = (
     NAME     => 'Test::TCP',
     DISTNAME => 'Test-TCP',
-    VERSION  => '2.11',
-    %args,
+    VERSION  => '2.17',
+    EXE_FILES => [glob('script/*'), glob('bin/*')],
+    CONFIGURE_REQUIRES => {
+  "ExtUtils::MakeMaker" => "6.64"
+}
+,
+    BUILD_REQUIRES     => {}
+,
+    TEST_REQUIRES      => {
+  "File::Temp" => 0,
+  "Socket" => 0,
+  "Test::More" => "0.98"
+}
+,
+    PREREQ_PM          => {
+  "IO::Socket::INET" => 0,
+  "IO::Socket::IP" => 0,
+  "Test::More" => 0,
+  "Test::SharedFork" => "0.29",
+  "Time::HiRes" => 0,
+  "perl" => "5.008001"
+}
+,
 );
+
+WriteMakefile(%WriteMakefileArgs);
