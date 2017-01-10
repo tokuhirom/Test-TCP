@@ -22,6 +22,12 @@ my $return = sub { 1 };
 {
     Test::TCP::wait_port(1, 1);
     is($wait_port_args{max_wait}, 1);
+    Test::TCP::wait_port ();
+    is($wait_port_args{max_wait}, 10, 'Default max_wait');
+    is($wait_port_args{host}, '127.0.0.1', 'Default host');
+    Test::TCP::wait_port (2, 5, 7);
+    is($wait_port_args{port}, 2, 'Backwards compatible port');
+    is($wait_port_args{max_wait}, 35, 'Backwards compatible max_wait');
 }
 
 $return = sub { $old->(@_) };

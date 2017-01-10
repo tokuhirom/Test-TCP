@@ -20,7 +20,7 @@ my $TERMSIG = $^O eq 'MSWin32' ? 'KILL' : 'TERM';
 sub test_tcp {
     my %args = @_;
     for my $k (qw/client server/) {
-        die "missing madatory parameter $k" unless exists $args{$k};
+        die "missing mandatory parameter $k" unless exists $args{$k};
     }
     my $server_code = delete $args{server};
     my $client_code = delete $args{client};
