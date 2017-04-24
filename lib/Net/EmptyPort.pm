@@ -42,17 +42,24 @@ sub empty_port {
     my ($host, $port, $proto) = @_ && ref $_[0] eq 'HASH' ? ($_[0]->{host}, $_[0]->{port}, $_[0]->{proto}) : (undef, @_);
     $host = '127.0.0.1'
         unless defined $host;
-    if (defined $port) {
-        $port = 49152 unless $port =~ /^[0-9]+$/ && $port < 49152;
-    } else {
-        $port = 50000 + (int(rand()*1500) + abs($$)) % 1500;
-    }
     $proto = $proto ? lc($proto) : 'tcp';
 
-    while ( $port++ < 65000 ) {
-        # Remote checks don't work on UDP, and Local checks would be redundant here...
-        next if ($proto eq 'tcp' && check_port({ host => $host, port => $port }));
-        return $port if can_bind($host, $port, $proto);
+    if (defined $port) {
+        # to ensure lower bound, check one by one in order
+        $port = 49152 unless $port =~ /^[0-9]+$/ && $port < 49152;
+        while ( $port++ < 65000 ) {
+            # Remote checks don't work on UDP, and Local checks would be redundant here...
+            next if ($proto eq 'tcp' && check_port({ host => $host, port => $port }));
+            return $port if can_bind($host, $port, $proto);
+        }
+    } else {
+        # kernel will select an unused port
+        while ( my $sock = _listen_socket($host, undef, $proto) ) {
+            $port = $sock->sockport;
+            $sock->close;
+            next if ($proto eq 'tcp' && check_port({ host => $host, port => $port }));
+            return $port;
+        }
     }
     die "empty port not found";
 }
