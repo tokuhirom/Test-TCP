@@ -2,6 +2,11 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.18 2017-04-24T06:00:25Z
+    - let the kernel select an empty port #59
+      https://github.com/tokuhirom/Test-TCP/pull/59
+      (i110)
+
 2.17 2016-08-18T14:42:56Z
     - check_port can take 'host' argument(#55)
     - Fix test on Windows issue(#55)

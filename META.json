@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v3.0.4, CPAN::Meta::Converter version 2.150005",
+   "generated_by" : "Minilla/v3.0.9, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
@@ -73,7 +73,7 @@
          "web" : "https://github.com/tokuhirom/Test-TCP"
       }
    },
-   "version" : "2.17",
+   "version" : "2.18",
    "x_contributors" : [
       "tokuhirom <tokuhirom@d0d07461-0603-4401-acd4-de1884942a52>",
       "mattn <mattn@d0d07461-0603-4401-acd4-de1884942a52>",
@@ -99,7 +99,10 @@
       "David Precious <davidp@preshweb.co.uk>",
       "Alex Vandiver <alex@chmrr.net>",
       "richard.leach <richard.leach@nccgroup.com>",
-      "Syohei YOSHIDA <syohex@gmail.com>"
+      "openstrike <git@openstrike.co.uk>",
+      "Pete Houston <githubdevteam@openstrike.co.uk>",
+      "Syohei YOSHIDA <syohex@gmail.com>",
+      "Ichito Nagata <i.nagata110@gmail.com>"
    ],
    "x_serialization_backend" : "JSON::PP version 2.27400"
 }
