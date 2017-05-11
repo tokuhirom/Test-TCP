@@ -73,7 +73,7 @@
          "web" : "https://github.com/tokuhirom/Test-TCP"
       }
    },
-   "version" : "2.18",
+   "version" : "2.19",
    "x_contributors" : [
       "tokuhirom <tokuhirom@d0d07461-0603-4401-acd4-de1884942a52>",
       "mattn <mattn@d0d07461-0603-4401-acd4-de1884942a52>",
@@ -102,7 +102,8 @@
       "openstrike <git@openstrike.co.uk>",
       "Pete Houston <githubdevteam@openstrike.co.uk>",
       "Syohei YOSHIDA <syohex@gmail.com>",
-      "Ichito Nagata <i.nagata110@gmail.com>"
+      "Ichito Nagata <i.nagata110@gmail.com>",
+      "Yasuhiro Matsumoto <mattn.jp@gmail.com>"
    ],
    "x_serialization_backend" : "JSON::PP version 2.27400"
 }
