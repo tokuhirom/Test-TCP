@@ -131,7 +131,7 @@ sub wait_port {
     my $waiter = _make_waiter($max_wait);
 
     while ( $waiter->() ) {
-        if ($^O eq 'MSWin32' ? `$^X -MTest::TCP::CheckPort -echeck_port $host $port $proto` : check_port({ host => $host, port => $port, proto => $proto })) {
+        if ($^O eq 'MSWin32' && defined($port) ? `$^X -MTest::TCP::CheckPort -echeck_port $host $port $proto` : check_port({ host => $host, port => $port, proto => $proto })) {
             return 1;
         }
     }
