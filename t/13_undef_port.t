@@ -3,7 +3,7 @@ use strict;
 use Test::More tests => 22;
 use Test::TCP;
 use IO::Socket::INET;
-use t::Server;
+BEGIN { require './t/Server.pm' }
 
 test_tcp(
     client => sub {

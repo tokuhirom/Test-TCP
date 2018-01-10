@@ -4,7 +4,7 @@ use Test::More tests => 5;
 use Test::TCP;
 use File::Temp ();
 use Fcntl qw/:seek/;
-use t::Server;
+BEGIN { require './t/Server.pm' }
 use POSIX;
 
 my $tmp = File::Temp->new();

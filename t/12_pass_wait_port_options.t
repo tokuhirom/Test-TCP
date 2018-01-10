@@ -4,7 +4,7 @@ use utf8;
 use Test::More;
 use Test::TCP;
 use IO::Socket::INET;
-use t::Server;
+BEGIN { require './t/Server.pm' }
 
 my %wait_port_args;
 my $old = \&Net::EmptyPort::wait_port;
