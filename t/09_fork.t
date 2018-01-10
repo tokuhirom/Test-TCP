@@ -1,7 +1,7 @@
 use strict;
 use Test::More tests => 6;
 use Test::TCP;
-use t::Server;
+BEGIN { require './t/Server.pm' }
 
 test_tcp 
     client => sub {

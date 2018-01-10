@@ -3,7 +3,7 @@ use strict;
 use Test::More tests => 9;
 use Test::TCP;
 use IO::Socket::INET;
-use t::Server;
+BEGIN { require './t/Server.pm' }
 
 my $child_pid;
 eval {
