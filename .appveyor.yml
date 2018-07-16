@@ -1,0 +1,55 @@
+environment:
+  matrix:
+   - STRAWBERRY_VERSION: 5.28.0.1
+   - STRAWBERRY_VERSION: 5.24.0.1
+   - STRAWBERRY_VERSION: 5.20.3.3
+
+#  Below are some other values for STRAWBERRY_VERSION
+#  some versions require --checksum due to packaging errors
+#  some don't. Note the space before -- in " --checksum..."`
+#  If you don't know the checksum pass a dummy value
+#  installation will display the correct one
+#  - STRAWBERRY_VERSION: 5.22.3.1
+#  - STRAWBERRY_VERSION: 5.20.0.1
+#    STRAWBERRY_CHECKSUM: " --checksum 4CF6939FBF9ACB8D2FF50FA8D90E81A5"
+#  - STRAWBERRY_VERSION: 5.20.1.1
+#    STRAWBERRY_CHECKSUM: " --checksum CE6FA083DADE1A4B7E20C1FF3399C2A0"
+skip_tags: true
+cache:
+install:
+# This is to sanitize PATH
+# we need
+# - git for Module::Install::Repository
+# - tar and gzip for make dist
+  - where git tar gzip
+  - cinst strawberryperl --version %STRAWBERRY_VERSION%%STRAWBERRY_CHECKSUM%
+  - refreshenv
+# Note that the old path is completely thrown away
+# While perl is in path after refreshenv, the path is polluted by other utilities
+# also, 2 other perls are there: in C:\Perl and in Git's installation
+# so various tools become misconfigured, such as an incorrect make variant is used
+# instead of gmake
+# We need git in path for Module::Install::Repository plugin to work
+  - set BP=c:\strawberry
+  - set PP=%BP%\perl
+  - path %SystemRoot%\system32;%PP%\site\bin;%PP%\vendor\bin;%PP%\bin;%BP%\c\bin;C:\Program Files\Git\cmd;C:\Program Files\Git\usr\bin;
+  - FOR /F %%I IN ('perl -MConfig -e "print $Config{version};"') DO SET STRAWBERRY_CONFIG_VERSION=%%I
+# ' # this line with an apostrophe is needed to fix broken highlighing in vim
+# Many tools use the version from Config.pm which is different
+  - echo Installed %STRAWBERRY_VERSION% got %STRAWBERRY_CONFIG_VERSION%
+# This is to ensure that there is a fatal error instead of a warning if git is not available
+  - git --version
+# These variables ensure that tests don't choke on interactive prompts
+  - set PERL_MM_USE_DEFAULT=1
+  - set NONINTERACTIVE_TESTING=1
+  - set PERL_MM_NONINTERACTIVE=1
+  - cpanm Test::Simple
+  - cpanp o >outdated.txt
+  - type outdated.txt
+build_script:
+# Some modules require the UTF-8 locale, and apparently each line is run in its
+# isolated subshell so we need to change the locale every time. If we remove the 65001 and run
+# chcp without parameter, we can see that locale is 437 instead of 65001 which means
+# some version of 8-bit European charset instead of UTF-8 required by some modules of
+# Japanese origin
+  - chcp 65001 && cpanm --test-only -v .
