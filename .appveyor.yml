@@ -43,7 +43,6 @@ install:
   - set PERL_MM_USE_DEFAULT=1
   - set NONINTERACTIVE_TESTING=1
   - set PERL_MM_NONINTERACTIVE=1
-  - cpanm Test::Simple
   - cpanp o >outdated.txt
   - type outdated.txt
 build_script:

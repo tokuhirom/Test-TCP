@@ -6,7 +6,7 @@ requires 'Test::More';
 requires 'Time::HiRes';
 
 on test => sub {
-    requires 'Test::More', '0.98';
+    requires 'Test::More', '1.302136';
     requires 'File::Temp';
     requires 'Socket';
 };

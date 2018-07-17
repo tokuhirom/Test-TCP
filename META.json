@@ -57,7 +57,7 @@
          "requires" : {
             "File::Temp" : "0",
             "Socket" : "0",
-            "Test::More" : "0.98"
+            "Test::More" : "1.302136"
          }
       }
    },
