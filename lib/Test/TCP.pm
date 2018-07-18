@@ -155,7 +155,7 @@ sub DESTROY {
 1;
 __END__
 
-=for stopwords OO
+=for stopwords OO loopback
 
 =encoding utf8
 

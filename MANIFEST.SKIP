@@ -1,0 +1,6 @@
+.appveyor.yml
+.travis.yml
+cpanfile
+minil.toml
+.git
+.build

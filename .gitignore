@@ -5,6 +5,7 @@ inc/
 pm_to_blib
 *.sw[po]
 ^\.git/
+MANIFEST
 MANIFEST.bak
 *.old
 MYMETA.*
