@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::TCP;
 use Test::More tests => 1;
-use t::Server;
+BEGIN { require './t/Server.pm' }
 
 test_tcp(
     client => sub {

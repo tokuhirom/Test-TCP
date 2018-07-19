@@ -4,7 +4,7 @@ use Test::TCP;
 use Test::More;
 use Socket;
 use IO::Socket::INET;
-use t::Server;
+BEGIN { require './t/Server.pm' }
 
 plan skip_all => "win32 doesn't support embedded function named dump()" if $^O eq 'MSWin32';
 plan tests => 2;

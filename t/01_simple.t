@@ -4,7 +4,7 @@ use Test::More;
 use Test::TCP;
 use Net::EmptyPort qw(can_bind);
 use IO::Socket::IP;
-use t::Server;
+BEGIN { require './t/Server.pm' }
 
 sub doit {
     my $host = shift;

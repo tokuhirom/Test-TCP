@@ -2,7 +2,10 @@ use warnings;
 use strict;
 use Test::More tests => 2;
 use Test::TCP;
-use t::Server;
+BEGIN {
+  require './t/Server.pm';
+  t::Server->import();
+}
 
 # ABOUT: some tcp server related software returns control when received SIGTERM instead of exit.
 # This test emulate it's situation.
