@@ -8,7 +8,6 @@ use strict;
 
 use ExtUtils::MakeMaker 6.64;
 
-
 my %WriteMakefileArgs = (
     NAME     => 'Test::TCP',
     DISTNAME => 'Test-TCP',
