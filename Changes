@@ -2,6 +2,10 @@ Revision history for Perl module Test::TCP
 
 {{$NEXT}}
 
+2.20 2019-08-03T22:47:58Z
+
+    - Fix test for . not in @INC by default #58
+
 2.19 2017-05-11T13:02:47Z
 
     commit aac1b06c1e3b0d73ca964794bab0c444d454ebcc

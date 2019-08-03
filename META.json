@@ -4,13 +4,13 @@
       "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v3.1.1, CPAN::Meta::Converter version 2.150010",
+   "generated_by" : "Minilla/v3.1.4, CPAN::Meta::Converter version 2.143240",
    "license" : [
       "perl_5"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
-      "version" : "2"
+      "version" : 2
    },
    "name" : "Test-TCP",
    "no_index" : {
@@ -73,7 +73,7 @@
          "web" : "https://github.com/tokuhirom/Test-TCP"
       }
    },
-   "version" : "2.19",
+   "version" : "2.20",
    "x_contributors" : [
       "Alex Vandiver <alex@chmrr.net>",
       "Andrii Melnykov <andy.melnikov@gmail.com>",
@@ -105,6 +105,5 @@
       "yappo <yappo@d0d07461-0603-4401-acd4-de1884942a52>",
       "奥 一穂 <kazuho@EM114-48-138-123.pool.e-mobile.ne.jp>"
    ],
-   "x_serialization_backend" : "JSON::PP version 2.27400_02",
    "x_static_install" : 1
 }
