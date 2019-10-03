@@ -83,4 +83,15 @@ eval { check_port (); };
 like ($@, qr/Expected .PeerService./, 'No args to check_port is fatal');
 ok (!check_port (empty_port(), 'tcp'), '2 args to check_port');
 
+subtest 'udp-wait-port' => sub {
+    my $port = empty_port({proto => 'udp'});
+    ok !check_port($port, 'udp'), "port is down";
+    my $sock = IO::Socket::IP->new(
+        Proto     => 'udp',
+        LocalPort => $port,
+        V6Only    => 1,
+    ) or die "failed to bind to a UDP socket:$!";
+    ok check_port($port, 'udp'), "port is up";
+};
+
 done_testing;
