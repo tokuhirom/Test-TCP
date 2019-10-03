@@ -268,6 +268,8 @@ Checks if the given port is already in use. Returns true if it is in use (i.e. i
 
 The function recognizes the following keys when given a hashref as the argument.
 
+When UDP is specified as the protocol, the `check_port` function sends a probe UDP packet to the designated port to see if an ICMP error message is returned, which indicates that the port is unassigned.  The port is assumed to be assigned, unless such response is observed within 0.1 seconds.
+
 =over 4
 
 =item C<< host >>

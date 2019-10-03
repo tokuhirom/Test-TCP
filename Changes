@@ -1,6 +1,7 @@
 Revision history for Perl module Test::TCP
 
 {{$NEXT}}
+    - Fix race condition in check_port(UDP) #78
 
 2.20 2019-08-03T22:47:58Z
 
