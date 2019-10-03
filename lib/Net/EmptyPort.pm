@@ -2,6 +2,8 @@ package Net::EmptyPort;
 use strict;
 use warnings;
 use base qw/Exporter/;
+use Errno qw/ECONNREFUSED/;
+use Fcntl;
 use IO::Socket::IP;
 use Time::HiRes ();
 
@@ -68,25 +70,17 @@ sub check_port {
     my ($host, $port, $proto) = @_ && ref $_[0] eq 'HASH' ? ($_[0]->{host}, $_[0]->{port}, $_[0]->{proto}) : (undef, @_);
     $host = '127.0.0.1'
         unless defined $host;
-    $proto = $proto ? lc($proto) : 'tcp';
 
-    # for TCP, we do a remote port check
-    # for UDP, we do a local port check, like empty_port does
-    my $sock = ($proto eq 'tcp') ?
-        IO::Socket::IP->new(
-            Proto    => 'tcp',
-            PeerAddr => $host,
-            PeerPort => $port,
-            V6Only   => 1,
-        ) :
-        IO::Socket::IP->new(
-            Proto     => $proto,
-            LocalAddr => $host,
-            LocalPort => $port,
-            V6Only   => 1,
-            (($^O eq 'MSWin32') ? () : (ReuseAddr => 1)),
-        )
-    ;
+    return _check_port_udp($host, $port)
+        if $proto && lc($proto) eq 'udp';
+
+    # TCP, check if possible to connect
+    my $sock = IO::Socket::IP->new(
+        Proto    => 'tcp',
+        PeerAddr => $host,
+        PeerPort => $port,
+        V6Only   => 1,
+    );
 
     if ($sock) {
         close $sock;
@@ -97,6 +91,34 @@ sub check_port {
     }
 
 }
+
+sub _check_port_udp {
+    my ($host, $port) = @_;
+
+    # send some UDP data and see if ICMP error is being sent back (i.e. ECONNREFUSED)
+    my $sock = IO::Socket::IP->new(
+        Proto    => 'udp',
+        PeerAddr => $host,
+        PeerPort => $port,
+        V6Only   => 1,
+    ) or die "failed to create bound UDP socket:$!";
+    fcntl($sock, F_SETFL, O_NONBLOCK)
+      or die "failed to set socket to nonblocking mode:$!";
+
+    $sock->send("0", 0)
+        or die "failed to send a UDP packet:$!";
+
+    my ($rfds, $efds) = ('', '');
+    vec($rfds, fileno($sock), 1) = 1;
+    vec($efds, fileno($sock), 1) = 1;
+    select $rfds, undef, $efds, 0.1;
+
+    # after 0.1 second of silence, we assume that the server is up
+    my $up = defined($sock->recv(my $data, 1000)) || $! != ECONNREFUSED;
+    close $sock;
+    $up;
+}
+
 
 sub _make_waiter {
     my $max_wait = shift;
