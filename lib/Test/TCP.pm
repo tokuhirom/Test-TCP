@@ -408,7 +408,7 @@ You can use the C<< host >> parameter to specify the bind address.
 
 =item How should I write IPv6 tests?
 
-You should use the `Net::EmptyPort::can_bind` function to check if the program can bind to the loopback address of IPv6, as well as the `host` parameter of the `test_tcp` function to specify the same address as the bind address.
+You should use the L<Net::EmptyPort/can_bind> function to check if the program can bind to the loopback address of IPv6, as well as the C<host> parameter of the L</test_tcp> function to specify the same address as the bind address.
 
     use Net::EmptyPort qw(can_bind);
 
