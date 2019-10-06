@@ -113,7 +113,11 @@ sub _check_port_udp {
     select $rfds, undef, $efds, 0.1;
 
     # after 0.1 second of silence, we assume that the server is up
-    my $up = defined($sock->recv(my $data, 1000)) || $! != ECONNREFUSED;
+    my $up = defined($sock->recv(my $data, 1000)) || (
+        ($^O eq 'MSWin32')
+            ? ($^E != Errno::WSAECONNRESET() && $^E != Errno::WSAECONNREFUSED())
+            : ($! != ECONNREFUSED)
+    );
     close $sock;
     $up;
 }
