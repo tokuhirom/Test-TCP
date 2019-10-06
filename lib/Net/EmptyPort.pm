@@ -101,9 +101,8 @@ sub _check_port_udp {
         PeerAddr => $host,
         PeerPort => $port,
         V6Only   => 1,
+        Blocking => 0,
     ) or die "failed to create bound UDP socket:$!";
-    fcntl($sock, F_SETFL, O_NONBLOCK)
-      or die "failed to set socket to nonblocking mode:$!";
 
     $sock->send("0", 0)
         or die "failed to send a UDP packet:$!";
