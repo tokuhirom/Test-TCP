@@ -101,9 +101,8 @@ sub _check_port_udp {
         PeerAddr => $host,
         PeerPort => $port,
         V6Only   => 1,
+        Blocking => 0,
     ) or die "failed to create bound UDP socket:$!";
-    fcntl($sock, F_SETFL, O_NONBLOCK)
-      or die "failed to set socket to nonblocking mode:$!";
 
     $sock->send("0", 0)
         or die "failed to send a UDP packet:$!";
@@ -114,7 +113,11 @@ sub _check_port_udp {
     select $rfds, undef, $efds, 0.1;
 
     # after 0.1 second of silence, we assume that the server is up
-    my $up = defined($sock->recv(my $data, 1000)) || $! != ECONNREFUSED;
+    my $up = defined($sock->recv(my $data, 1000)) || (
+        ($^O eq 'MSWin32')
+            ? ($^E != Errno::WSAECONNRESET() && $^E != Errno::WSAECONNREFUSED())
+            : ($! != ECONNREFUSED)
+    );
     close $sock;
     $up;
 }
