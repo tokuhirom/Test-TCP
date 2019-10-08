@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v3.1.6, CPAN::Meta::Converter version 2.150010",
+   "generated_by" : "Minilla/v3.1.4, CPAN::Meta::Converter version 2.143240",
    "license" : [
       "perl_5"
    ],
@@ -37,7 +37,7 @@
             "Perl::Critic" : "1.105",
             "Test::CPAN::Meta" : "0",
             "Test::MinimumVersion::Fast" : "0.04",
-            "Test::PAUSE::Permissions" : "0.07",
+            "Test::PAUSE::Permissions" : "0.04",
             "Test::Perl::Critic" : "1.02",
             "Test::Pod" : "1.41",
             "Test::Spellunker" : "v0.2.7"
@@ -73,7 +73,7 @@
          "web" : "https://github.com/tokuhirom/Test-TCP"
       }
    },
-   "version" : "2.21",
+   "version" : "2.22",
    "x_contributors" : [
       "Alex Vandiver <alex@chmrr.net>",
       "Andrii Melnykov <andy.melnikov@gmail.com>",
@@ -89,12 +89,14 @@
       "Kenichi Ishigaki <ishigaki@cpan.org>",
       "Kent Fredric <kentnl@gentoo.org>",
       "Masahiro Nagano <kazeburo@gmail.com>",
+      "Mohammad S Anwar <mohammad.anwar@yahoo.com>",
       "Neil Bowers <neil@bowers.com>",
       "Pavel Shaydo <zwon@cpan.org>",
       "Pete Houston <githubdevteam@openstrike.co.uk>",
       "Petr Písař <ppisar@redhat.com>",
       "Syohei YOSHIDA <syohex@gmail.com>",
       "Tatsuhiko Miyagawa <miyagawa@gmail.com>",
+      "Tatsuhiko Miyagawa <tmiyagawa@fastly.com>",
       "Thomas Klausner <domm@plix.at>",
       "Yasuhiro Matsumoto <mattn.jp@gmail.com>",
       "gfx <gfuji@cpan.org>",
@@ -105,6 +107,5 @@
       "yappo <yappo@d0d07461-0603-4401-acd4-de1884942a52>",
       "奥 一穂 <kazuho@EM114-48-138-123.pool.e-mobile.ne.jp>"
    ],
-   "x_serialization_backend" : "JSON::PP version 2.97001",
    "x_static_install" : 1
 }

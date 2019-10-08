@@ -233,7 +233,7 @@ Test::TCP is a test utility to test TCP/IP-based server programs.
 
 - How should I write IPv6 tests?
 
-    You should use the \`Net::EmptyPort::can\_bind\` function to check if the program can bind to the loopback address of IPv6, as well as the \`host\` parameter of the \`test\_tcp\` function to specify the same address as the bind address.
+    You should use the ["can\_bind" in Net::EmptyPort](https://metacpan.org/pod/Net::EmptyPort#can_bind) function to check if the program can bind to the loopback address of IPv6, as well as the `host` parameter of the ["test\_tcp"](#test_tcp) function to specify the same address as the bind address.
 
         use Net::EmptyPort qw(can_bind);
 
