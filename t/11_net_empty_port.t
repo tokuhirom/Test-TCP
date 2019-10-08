@@ -88,6 +88,7 @@ subtest 'udp-wait-port' => sub {
     ok !check_port($port, 'udp'), "port is down";
     my $sock = IO::Socket::IP->new(
         Proto     => 'udp',
+        LocalAddr => '127.0.0.1',
         LocalPort => $port,
         V6Only    => 1,
     ) or die "failed to bind to a UDP socket:$!";
