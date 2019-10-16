@@ -1,6 +1,7 @@
 Revision history for Perl module Test::TCP
 
 {{$NEXT}}
+    - Portability fixes for Win32 perl older than 5.24 #88
 
 2.22 2019-10-08T08:15:34Z
     - Portability fixes for Win32 and non-linux #83, #87

@@ -92,6 +92,17 @@ sub check_port {
 
 }
 
+# a portable error check to support deprecation of $! for socket operations
+# on Windows in perl 5.24 and later. See the section about WSA in man perlport
+sub _no_ECONNREFUSED_error {
+  # if not on Windows
+  return ($! != ECONNREFUSED) if $^O ne 'MSWin32';
+  # if on Windows and if the new constants exist
+  return ($^E != Errno::WSAECONNRESET() and $^E != Errno::WSAECONNREFUSED()) if exists &Errno::WSAECONNRESET;
+  # if on Windows and there are no new constants
+  return ($! != ECONNREFUSED and $! != Errno::ECONNRESET());
+}
+
 sub _check_port_udp {
     my ($host, $port) = @_;
 
@@ -113,11 +124,8 @@ sub _check_port_udp {
     select $rfds, undef, $efds, 0.1;
 
     # after 0.1 second of silence, we assume that the server is up
-    my $up = defined($sock->recv(my $data, 1000)) || (
-        ($^O eq 'MSWin32')
-            ? ($^E != Errno::WSAECONNRESET() && $^E != Errno::WSAECONNREFUSED())
-            : ($! != ECONNREFUSED)
-    );
+    # _no_ECONNREFUSED_error() is a portable equivalent of $! != ECONNREFUSED
+    my $up = defined($sock->recv(my $data, 1000)) || _no_ECONNREFUSED_error();
     close $sock;
     $up;
 }
