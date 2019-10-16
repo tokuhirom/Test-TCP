@@ -46,6 +46,9 @@ sub doit {
     );
 }
 
+ok 1, "starting the tests";
+
+
 subtest 'v4' => sub {
     doit('127.0.0.1');
 };

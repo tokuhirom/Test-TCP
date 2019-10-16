@@ -51,4 +51,6 @@ build_script:
 # chcp without parameter, we can see that locale is 437 instead of 65001 which means
 # some version of 8-bit European charset instead of UTF-8 required by some modules of
 # Japanese origin
+  - chcp 65001 && cpanm --installdeps --notest --quiet .
+  - chcp 65001 && prove -v -I./lib t/01_simple.t
   - chcp 65001 && cpanm --test-only -v .
