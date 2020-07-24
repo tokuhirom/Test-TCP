@@ -2,6 +2,7 @@ name: linux
 
 on:
   - push
+  - pull_request
 
 jobs:
   perl:
@@ -20,6 +21,7 @@ jobs:
           - '5.26'
           - '5.28'
           - '5.30'
+          - '5.32'
     container:
       image: perl:${{ matrix.perl-version }}
     steps:
