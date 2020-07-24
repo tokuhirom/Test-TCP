@@ -1,0 +1,39 @@
+name: test
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  ubuntu:
+    name: ubuntu perl ${{ matrix.perl-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl-version:
+          - '5.14-buster'
+          - '5.20-buster'
+          - '5.30'
+          - '5.40'
+          - 'latest'
+    container:
+      image: perl:${{ matrix.perl-version }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: perl -V
+        run: perl -V
+      - name: Install Dependencies
+        run: curl -fsSL https://cpanmin.us/ | perl - -n --with-develop --installdeps .
+      - name: Run Tests
+        run: prove -lr t
+  windows:
+    name: windows perl
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: perl -V
+        run: perl -V
+      - name: Install Dependencies
+        run: curl -fsSL https://raw.githubusercontent.com/skaji/cpm/main/cpm | perl - install -g --with-develop --show-build-log-on-failure
+      - name: Run Tests
+        run: prove -lr t

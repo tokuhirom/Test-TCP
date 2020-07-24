@@ -1,3 +1,4 @@
+[![Actions Status](https://github.com/tokuhirom/Test-TCP/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/tokuhirom/Test-TCP/actions?workflow=test) [![MetaCPAN Release](https://badge.fury.io/pl/Test-TCP.svg)](https://metacpan.org/release/Test-TCP)
 # NAME
 
 Test::TCP - testing TCP program
@@ -32,7 +33,7 @@ If using a server that can only accept a port number, e.g. memcached:
     ...
 
 **N.B.**: This is vulnerable to race conditions, if another process binds
-to the same port after [Net::EmptyPort](https://metacpan.org/pod/Net::EmptyPort) found it available.
+to the same port after [Net::EmptyPort](https://metacpan.org/pod/Net%3A%3AEmptyPort) found it available.
 
 And functional interface is available:
 
@@ -121,7 +122,7 @@ Test::TCP is a test utility to test TCP/IP-based server programs.
 
         Will wait for at most `$max_wait` seconds before checking port.
 
-        See also [Net::EmptyPort](https://metacpan.org/pod/Net::EmptyPort).
+        See also [Net::EmptyPort](https://metacpan.org/pod/Net%3A%3AEmptyPort).
 
         _Default: 10_
 
@@ -233,7 +234,7 @@ Test::TCP is a test utility to test TCP/IP-based server programs.
 
 - How should I write IPv6 tests?
 
-    You should use the ["can\_bind" in Net::EmptyPort](https://metacpan.org/pod/Net::EmptyPort#can_bind) function to check if the program can bind to the loopback address of IPv6, as well as the `host` parameter of the ["test\_tcp"](#test_tcp) function to specify the same address as the bind address.
+    You should use the ["can\_bind" in Net::EmptyPort](https://metacpan.org/pod/Net%3A%3AEmptyPort#can_bind) function to check if the program can bind to the loopback address of IPv6, as well as the `host` parameter of the ["test\_tcp"](#test_tcp) function to specify the same address as the bind address.
 
         use Net::EmptyPort qw(can_bind);
 

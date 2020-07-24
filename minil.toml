@@ -1,1 +1,2 @@
 module_maker="ExtUtilsMakeMaker"
+badges = ['github-actions/test.yml', 'metacpan']
