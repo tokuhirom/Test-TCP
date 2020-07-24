@@ -1,5 +1,0 @@
-language: perl
-dist: trusty
-perl:
-  - "5.26"
-  - "5.14"
