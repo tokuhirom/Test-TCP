@@ -18,7 +18,7 @@ jobs:
       - name: Set up perl
         uses: shogo82148/actions-setup-perl@v1
         with:
-          perl-version: ${{ matrix.perl }}
+          perl-version: ${{ matrix.perl-version }}
       - name: Install Dependencies
         run: |
           curl -sL https://cpanmin.us/ | perl - -nq --with-develop --installdeps .
