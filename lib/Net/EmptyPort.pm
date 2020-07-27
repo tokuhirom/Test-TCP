@@ -42,7 +42,7 @@ sub listen_socket {
 # http://www.iana.org/assignments/port-numbers
 sub empty_port {
     my ($host, $port, $proto) = @_ && ref $_[0] eq 'HASH' ? ($_[0]->{host}, $_[0]->{port}, $_[0]->{proto}) : (undef, @_);
-    $host = '127.0.0.1'
+    $host = '0.0.0.0'
         unless defined $host;
     $proto = $proto ? lc($proto) : 'tcp';
 

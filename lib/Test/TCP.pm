@@ -64,7 +64,6 @@ sub new {
     my $self = bless {
         auto_start => 1,
         max_wait   => 10,
-        host       => '127.0.0.1',
         _my_pid    => $$,
         %args,
     }, $class;
