@@ -4,11 +4,15 @@ use warnings;
 use base qw/Exporter/;
 use Errno qw/ECONNREFUSED/;
 use Fcntl;
+use Carp qw(confess);
 use IO::Socket::IP;
 use Time::HiRes ();
 
 our @EXPORT = qw/ can_bind empty_port check_port wait_port /;
 our @EXPORT_OK = qw/ listen_socket /;
+
+# to avoid EADDRINUSE, the module keeps the used ports in the global registry
+our %used_port;
 
 sub can_bind {
     my ($host, $port, $proto) = @_;
@@ -38,9 +42,21 @@ sub listen_socket {
     return _listen_socket($host, undef, $proto);
 }
 
+sub empty_port {
+    my $port;
+    my $i = 0;
+    do {
+        if ($i++ > 1000) {
+            confess "empty port not found";
+        }
+        $port = _empty_port(@_);
+    } until $used_port{$port}++;
+    return $port;
+}
+
 # get a empty port on 49152 .. 65535
 # http://www.iana.org/assignments/port-numbers
-sub empty_port {
+sub _empty_port {
     my ($host, $port, $proto) = @_ && ref $_[0] eq 'HASH' ? ($_[0]->{host}, $_[0]->{port}, $_[0]->{proto}) : (undef, @_);
     $host = '127.0.0.1'
         unless defined $host;
@@ -63,7 +79,7 @@ sub empty_port {
             return $port;
         }
     }
-    die "empty port not found";
+    confess "empty port not found";
 }
 
 sub check_port {
