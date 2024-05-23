@@ -1,0 +1,26 @@
+name: windows
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  perl:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        perl-version:
+          - '5.30'
+          - '5.32'
+    name: Perl ${{ matrix.perl-version }} on Windows
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl-version }}
+      - name: Install Dependencies
+        run: |
+          curl -sL https://cpanmin.us/ | perl - -nq --with-develop --installdeps .
+      - name: Run Tests
+        run: prove -lr t
